@@ -1,0 +1,1 @@
+Smoke test of the fix-issues fork bot. Safe to delete.
