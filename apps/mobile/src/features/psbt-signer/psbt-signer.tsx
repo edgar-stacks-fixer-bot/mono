@@ -12,6 +12,7 @@ import { useBtcMarketDataQuery } from '@/queries/market-data/btc-market-data.que
 import { useGenerateBtcUnsignedTransactionNativeSegwit } from '@/queries/transaction/bitcoin-transactions.hooks';
 import { useBitcoinBroadcastTransaction } from '@/queries/transaction/use-bitcoin-broadcast-transaction';
 import { useAccountUtxos } from '@/queries/utxos/utxos.query';
+import { RpcBitcoinSelectors } from '@/shared/selectors/rpc-bitcoin.selectors';
 import { useBitcoinAccounts } from '@/store/keychains/bitcoin/bitcoin-keychains.read';
 import { analytics } from '@/utils/analytics';
 import { formatCurrency } from '@/utils/currency-formatter';
@@ -286,14 +287,14 @@ function BasePsbtSigner(props: BasePsbtSignerProps) {
           {broadcastedTxid && <BtcStatusRow txid={broadcastedTxid} />}
 
           <Approver.Overview>
-            <Approver.Section mb="-3">
+            <Approver.Section mb="-3" testID={RpcBitcoinSelectors.PsbtOutcome}>
               <Approver.Subheader icon={<SentIcon variant="small" />}>
                 {t`You’ll send`}
               </Approver.Subheader>
               <BitcoinOutcome amount={principalSpend} />
             </Approver.Section>
 
-            <Approver.Section>
+            <Approver.Section testID={RpcBitcoinSelectors.PsbtRecipients}>
               <Approver.Subheader>{t`To address`}</Approver.Subheader>
               <OutcomeAddressesCard addresses={recipients.map(r => r.address)} />
               {unrecognizedOutputs.length > 0 && (
@@ -306,7 +307,7 @@ function BasePsbtSigner(props: BasePsbtSignerProps) {
             <ApproverAccountCard accounts={psbtAccounts} />
           </Approver.Section>
 
-          <Approver.Section>
+          <Approver.Section testID={RpcBitcoinSelectors.PsbtFeeSection}>
             <BitcoinFeeCard
               disabled={!feeEditorEnabled || !feeRates}
               feeType={selectedFeeType}
@@ -327,7 +328,12 @@ function BasePsbtSigner(props: BasePsbtSignerProps) {
           </Approver.Advanced>
         </Approver.Container>
         <Approver.Footer>
-          <Box flexDirection="row" alignItems="center" justifyContent="space-between">
+          <Box
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between"
+            testID={RpcBitcoinSelectors.PsbtTotalSpend}
+          >
             <Text variant="label02">{t`Total spend`}</Text>
             <Text variant="label02">{formatCurrency(totalSpendQuote)}</Text>
           </Box>

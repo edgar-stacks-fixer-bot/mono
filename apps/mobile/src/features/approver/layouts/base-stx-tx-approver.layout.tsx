@@ -21,6 +21,7 @@ import {
 } from '@/features/approver/utils';
 import { useOpenUrl } from '@/features/browser/browser/use-open-url';
 import { useCurrentNetworkState } from '@/queries/leather-query-provider';
+import { RpcStacksSelectors } from '@/shared/selectors/rpc-stacks.selectors';
 import { type Account } from '@/store/accounts/accounts';
 import { t } from '@lingui/core/macro';
 import {
@@ -136,7 +137,7 @@ export function BaseStxTxApproverLayout({
           </Approver.Section>
           {isTokenTransferPayload(tx.payload) && (
             <Approver.Overview>
-              <Approver.Section mb="-3">
+              <Approver.Section mb="-3" testID={RpcStacksSelectors.TxTransferOutcome}>
                 <Approver.Subheader icon={<SentIcon variant="small" />}>
                   {t`You’ll send`}
                 </Approver.Subheader>

@@ -4,6 +4,7 @@ import { Screen } from '@/components/screen/screen';
 import { accountIconMap } from '@/features/account/components/account-avatar';
 import { Avatars } from '@/features/settings/choose-avatar/avatars';
 import SettingsLayout from '@/features/settings/settings-layout';
+import { AccountSelectors } from '@/shared/selectors/account.selectors';
 import { type Account } from '@/store/accounts/accounts';
 import { useAccountByIndex } from '@/store/accounts/accounts.read';
 import { userUpdatesAccountIcon } from '@/store/accounts/accounts.write';
@@ -46,7 +47,7 @@ function ChooseAvatar({ fingerprint, accountIndex, account }: ChooseAvatarProps)
 
   return (
     <>
-      <SettingsLayout>
+      <SettingsLayout testID={AccountSelectors.ChooseAvatarScreen}>
         <Box gap="5">
           <SquircleBox
             alignSelf="center"
@@ -70,7 +71,11 @@ function ChooseAvatar({ fingerprint, accountIndex, account }: ChooseAvatarProps)
         </Box>
       </SettingsLayout>
       <Screen.Footer>
-        <Button disabled={isSubmitDisabled} onPress={onSubmit}>
+        <Button
+          disabled={isSubmitDisabled}
+          onPress={onSubmit}
+          testID={AccountSelectors.ChooseAvatarSaveButton}
+        >
           {t`Save`}
         </Button>
       </Screen.Footer>

@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 
 import { compareStrings } from '../utils/compare.js';
 import { toRepoRelative } from './app-config.js';
+import { checkExpoRoutes } from './expo-routes-check.js';
 import { type ParsedFeature, type ResolvedString } from './features-parser.js';
 import {
   type FeatureMapModel,
@@ -30,6 +31,10 @@ function featureLabel(feature: ParsedFeature): string {
 
 function featuresGlob(model: FeatureMapModel): string {
   return `${toRepoRelative(model.config.featuresDir)}/*.features.ts`;
+}
+
+function dispatchFilesLabel(model: FeatureMapModel): string {
+  return (model.config.rpcDispatchFiles ?? []).map(toRepoRelative).join(' or ');
 }
 
 function sortedEntries<T>(map: ReadonlyMap<string, T>): [string, T][] {
@@ -95,6 +100,16 @@ function checkUnclaimedRpcHandlers(
   const errors: string[] = [];
   for (const [name, handler] of sortedEntries(model.rpcHandlers)) {
     if (claims.has(name)) continue;
+    if (model.config.rpcDispatchFiles) {
+      errors.push(
+        [
+          `rpc method ${name} (${toRepoRelative(handler.file)}:${handler.line}) is claimed by no entry in ${featuresGlob(model)}.`,
+          `Fix: add an entry point { kind: 'rpc', method: '${name}' } to the entry for the approver it opens,`,
+          `or add an entry with anchor { kind: 'rpc', handlers: ['${name}'] } for a method without an approver.`,
+        ].join('\n')
+      );
+      continue;
+    }
     const methods = handler.methods.length > 0 ? handler.methods.join(', ') : 'no method found';
     errors.push(
       [
@@ -145,8 +160,11 @@ function checkAnchor(model: FeatureMapModel, feature: ParsedFeature): string[] {
     }
     for (const handler of anchor.handlers) {
       if (model.rpcHandlers.has(handler)) continue;
+      const source = model.config.rpcMethodsDir
+        ? `a file in ${toRepoRelative(model.config.rpcMethodsDir)}`
+        : `a method dispatched in ${dispatchFilesLabel(model)}`;
       errors.push(
-        `${label}: anchor handler '${handler}' is not a file in ${toRepoRelative(model.config.rpcMethodsDir)}. Fix: use one of ${[...model.rpcHandlers.keys()].join(', ')}.`
+        `${label}: anchor handler '${handler}' is not ${source}. Fix: use one of ${[...model.rpcHandlers.keys()].join(', ')}.`
       );
     }
   }
@@ -183,14 +201,20 @@ function actionError(
   action: string
 ): string | undefined {
   if (model.pageObjectActions.has(action)) return undefined;
+  if (model.config.maestro) {
+    return `${featureLabel(feature)}: ${field} '${action}' is not a Maestro sub-flow in ${toRepoRelative(model.config.maestro.actionsDir)}. Fix: use one of ${[...model.pageObjectActions.keys()].join(', ')} or add the sub-flow.`;
+  }
   const [className] = action.split('.');
   const candidates = [...model.pageObjectActions.keys()].filter(name =>
     name.startsWith(`${className}.`)
   );
+  const pageObjectsDir = model.config.pageObjectsDir
+    ? toRepoRelative(model.config.pageObjectsDir)
+    : 'the page objects';
   const hint =
     candidates.length > 0
       ? `Methods of ${className}: ${candidates.map(name => name.split('.')[1]).join(', ')}.`
-      : `No page object named ${className} in ${toRepoRelative(model.config.pageObjectsDir)}.`;
+      : `No page object named ${className} in ${pageObjectsDir}.`;
   return `${featureLabel(feature)}: ${field} '${action}' is not a public page-object method. ${hint} Fix: use an existing method or add one to the page object.`;
 }
 
@@ -209,7 +233,6 @@ function checkFeatureReferences(model: FeatureMapModel, feature: ParsedFeature):
   const errors: string[] = [];
   const label = featureLabel(feature);
   const specsDir = toRepoRelative(model.config.specsDir);
-  const mocksDir = toRepoRelative(model.config.mocksDir);
   const rpcDir = toRepoRelative(model.config.rpcEndpointsDir);
 
   errors.push(...checkAnchor(model, feature));
@@ -225,8 +248,12 @@ function checkFeatureReferences(model: FeatureMapModel, feature: ParsedFeature):
 
   for (const spec of feature.specs) {
     if (model.specs.has(spec) && existsSync(specPathFor(spec))) continue;
+    const maestro = model.config.maestro;
+    const target = maestro
+      ? `a Maestro flow under ${maestro.flowsDirs.map(toRepoRelative).join(' or ')}, or a *.spec.ts(x) under ${specsDir},`
+      : `a *.spec.ts under ${specsDir}`;
     errors.push(
-      `${label}: spec '${spec}' does not exist. Fix: point it at a *.spec.ts under ${specsDir} or remove it.`
+      `${label}: spec '${spec}' does not exist. Fix: point it at ${target} or remove it.`
     );
   }
 
@@ -241,8 +268,11 @@ function checkFeatureReferences(model: FeatureMapModel, feature: ParsedFeature):
 
   for (const mock of feature.preconditions.mocks) {
     if (model.mocks.has(mock)) continue;
+    const { mocksDir } = model.config;
     errors.push(
-      `${label}: mock '${mock}' is not exported from ${mocksDir}. Fix: use an exported mock function name or add the mock.`
+      mocksDir
+        ? `${label}: mock '${mock}' is not exported from ${toRepoRelative(mocksDir)}. Fix: use an exported mock function name or add the mock.`
+        : `${label}: mock '${mock}' cannot be checked: ${model.config.app} has no mock registry. Fix: remove it from mocks.`
     );
   }
   errors.push(...checkRedundantMocks(model, feature));
@@ -256,8 +286,11 @@ function checkFeatureReferences(model: FeatureMapModel, feature: ParsedFeature):
 
   for (const flag of feature.flags) {
     if (model.flags.includes(flag)) continue;
+    const source = model.config.featureFlagHooks
+      ? `a flag read by ${model.config.featureFlagHooks.join(' or ')}`
+      : `a key of ${model.config.featureFlagsInterfaceName}`;
     errors.push(
-      `${label}: flag '${flag}' is not a key of ${model.config.featureFlagsInterfaceName} in ${toRepoRelative(model.config.featureFlagsFile)}. Fix: use one of ${model.flags.join(', ')}.`
+      `${label}: flag '${flag}' is not ${source} in ${toRepoRelative(model.config.featureFlagsFile)}. Fix: use one of ${model.flags.join(', ')}.`
     );
   }
 
@@ -344,6 +377,7 @@ export function checkFeatureMap(model: FeatureMapModel): CheckResult {
   errors.push(...checkUnclaimedRoutes(model, routeClaims));
   errors.push(...checkOverclaimedRoutes(model, routeClaims));
   errors.push(...checkUnclaimedRpcHandlers(model, rpcClaims));
+  if (model.config.expoRouter) errors.push(...checkExpoRoutes(model));
   return { errors };
 }
 

@@ -1,0 +1,18 @@
+export const SendSelectors = {
+  AssetPickerItem: 'sendAssetPickerItem',
+  BtcForm: 'sendBtcForm',
+  MemoToggle: 'sendMemoToggle',
+  QrScannerCloseButton: 'sendQrScannerCloseButton',
+  RecipientGuardCancelButton: 'sendRecipientGuardCancelButton',
+  RecipientGuardConfirmButton: 'sendRecipientGuardConfirmButton',
+  RecipientGuardDismissButton: 'sendRecipientGuardDismissButton',
+  RecipientGuardSheet: 'sendRecipientGuardSheet',
+  RecipientQrButton: 'sendRecipientQrButton',
+  RecipientSearchQrButton: 'sendRecipientSearchQrButton',
+  RecipientSelectorItem: 'sendRecipientSelectorItem',
+  RecipientSheet: 'sendRecipientSheet',
+  RecipientToggle: 'sendRecipientToggle',
+  ReviewButton: 'sendReviewButton',
+  Sip10Form: 'sendSip10Form',
+  StxForm: 'sendStxForm',
+} as const;

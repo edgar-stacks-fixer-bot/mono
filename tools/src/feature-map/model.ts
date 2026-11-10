@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 
 import { compareStrings } from '../utils/compare.js';
 import { type FeatureMapAppConfig } from './app-config.js';
+import { parseExpoRoutes } from './expo-routes-parser.js';
 import { type FeatureGate, type FeatureParam, featureGates } from './feature-entry.js';
 import {
   type FeaturesParseResult,
@@ -9,6 +10,8 @@ import {
   type ResolvedString,
   parseFeaturesSource,
 } from './features-parser.js';
+import { loadMaestroActions, loadMaestroFlows } from './maestro-flows.js';
+import { loadFeatureFlagHookKeys, loadMobileRpcHandlers } from './mobile-assets.js';
 import {
   type RouteReference,
   type RoutedRoute,
@@ -17,7 +20,6 @@ import {
   parseRouterFiles,
 } from './routers-parser.js';
 import {
-  type PageObjectAction,
   type RpcHandler,
   type SelectorObject,
   type SetupMocks,
@@ -44,7 +46,7 @@ export interface FeatureMapModel {
   readonly router: RouterModel;
   readonly features: readonly ParsedFeature[];
   readonly parseErrors: readonly string[];
-  readonly pageObjectActions: ReadonlyMap<string, PageObjectAction>;
+  readonly pageObjectActions: ReadonlyMap<string, SourceLocation>;
   readonly mocks: ReadonlyMap<string, SourceLocation>;
   readonly setupMocks: SetupMocks | undefined;
   readonly specs: ReadonlyMap<string, SpecFile>;
@@ -66,6 +68,43 @@ function parseAllFeatures(files: readonly string[], table: StringTable): Feature
   return { features, errors };
 }
 
+function loadRouter(
+  config: FeatureMapAppConfig,
+  table: StringTable,
+  routeUrls: ReadonlyMap<string, string>
+): RouterModel {
+  if (config.expoRouter) return parseExpoRoutes(config.expoRouter, routeUrls);
+  return parseRouterFiles(
+    loadRouterFiles(config),
+    table,
+    config.routeUrlsObjectName,
+    config.importAliases
+  );
+}
+
+function loadActions(config: FeatureMapAppConfig): Map<string, SourceLocation> {
+  if (config.maestro) return loadMaestroActions(config.maestro.actionsDir);
+  return loadPageObjectActions(config);
+}
+
+function loadAllSpecs(config: FeatureMapAppConfig): Map<string, SpecFile> {
+  const specs = loadSpecs(config);
+  if (!config.maestro) return specs;
+  return new Map([...loadMaestroFlows(config.maestro.flowsDirs), ...specs]);
+}
+
+function loadFlags(config: FeatureMapAppConfig): string[] {
+  if (config.featureFlagHooks) {
+    return loadFeatureFlagHookKeys(config.featureFlagsFile, config.featureFlagHooks);
+  }
+  return loadFeatureFlags(config);
+}
+
+function loadHandlers(config: FeatureMapAppConfig): Map<string, RpcHandler> {
+  if (config.rpcDispatchFiles) return loadMobileRpcHandlers(config);
+  return loadRpcHandlers(config);
+}
+
 export function buildFeatureMapModel(config: FeatureMapAppConfig): FeatureMapModel {
   const routeUrls = loadRouteUrls(config);
   const selectorTable = loadSelectorTable(config);
@@ -73,12 +112,7 @@ export function buildFeatureMapModel(config: FeatureMapAppConfig): FeatureMapMod
     selectorTable,
     new Map([[config.routeUrlsObjectName, routeUrls]]),
   ]);
-  const router = parseRouterFiles(
-    loadRouterFiles(config),
-    table,
-    config.routeUrlsObjectName,
-    config.importAliases
-  );
+  const router = loadRouter(config, table, routeUrls);
   const parsed = parseAllFeatures(loadFeatureFiles(config), table);
   const mocks = loadMockFunctions(config);
 
@@ -89,14 +123,14 @@ export function buildFeatureMapModel(config: FeatureMapAppConfig): FeatureMapMod
     router,
     features: parsed.features,
     parseErrors: parsed.errors,
-    pageObjectActions: loadPageObjectActions(config),
+    pageObjectActions: loadActions(config),
     mocks,
     setupMocks: loadSetupMocks(config, mocks),
-    specs: loadSpecs(config),
-    flags: loadFeatureFlags(config),
+    specs: loadAllSpecs(config),
+    flags: loadFlags(config),
     rpcMethods: loadRpcMethods(config),
     selectorObjects: loadSelectorObjects(config),
-    rpcHandlers: loadRpcHandlers(config),
+    rpcHandlers: loadHandlers(config),
   };
 }
 

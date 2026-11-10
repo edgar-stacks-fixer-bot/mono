@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GradientBorder } from '@/components/gradient-border';
+import { ActivitySelectors } from '@/shared/selectors/activity.selectors';
+import { BrowserSelectors } from '@/shared/selectors/browser.selectors';
+import { HomeSelectors } from '@/shared/selectors/home.selectors';
 import { t } from '@lingui/core/macro';
 import { useSegments } from 'expo-router';
 import { TabList, TabSlot, TabTrigger, Tabs } from 'expo-router/ui';
@@ -50,6 +53,7 @@ export function TabLayout() {
               defaultIcon={<HomeDefaultIcon />}
               name="(index)"
               title={t`Home`}
+              testID={HomeSelectors.HomeTab}
             />
           </TabTrigger>
           <TabTrigger asChild style={{ flex: 1 }} name="activity" href="/(tabs)/activity">
@@ -58,6 +62,7 @@ export function TabLayout() {
               defaultIcon={<ActivityDefaultIcon />}
               name="activity"
               title={t`Activity`}
+              testID={ActivitySelectors.Tab}
             />
           </TabTrigger>
           <TabTrigger asChild style={{ flex: 1 }} name="browser" href="/(tabs)/browser">
@@ -66,6 +71,7 @@ export function TabLayout() {
               defaultIcon={<BrowseDefaultIcon />}
               name="browser"
               title={t`Browser`}
+              testID={BrowserSelectors.Tab}
             />
           </TabTrigger>
         </TabList>
