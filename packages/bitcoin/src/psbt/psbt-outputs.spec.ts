@@ -3,7 +3,10 @@ import * as btc from '@scure/btc-signer';
 import { describe, expect, it } from 'vitest';
 
 import { getOutputScriptType } from '../utils/bitcoin.utils';
+import { createBitcoinAddress } from '../validation/bitcoin-address';
+import { BitcoinError } from '../validation/bitcoin-error';
 import { getPsbtDetails } from './psbt-details';
+import { getParsedOutputs } from './psbt-outputs';
 
 const NETWORK = btc.NETWORK;
 const ownerPayment = btc.p2wpkh(hexToBytes('02'.padEnd(66, '3')), NETWORK);
@@ -58,5 +61,48 @@ describe('getPsbtDetails output parsing', () => {
     const wpkhOutput = details.psbtOutputs.find(output => output.value === 10_000);
     expect(wpkhOutput?.address).toBe(recipientAddress);
     expect(wpkhOutput?.scriptType).toBe('wpkh');
+  });
+});
+
+describe('getParsedOutputs', () => {
+  it('parses every output when all outputs have a script', () => {
+    const outputs = [
+      {
+        script: btc.OutScript.encode(btc.Address(NETWORK).decode(recipientAddress)),
+        amount: 20_000n,
+      },
+      { script: p2aScript, amount: 330n },
+    ];
+
+    expect(
+      getParsedOutputs({
+        isPsbtMutable: false,
+        outputs,
+        networkMode: 'mainnet',
+        psbtAddresses: [createBitcoinAddress(recipientAddress)],
+      })
+    ).toEqual([
+      {
+        address: recipientAddress,
+        isMutable: false,
+        toSign: true,
+        value: 20_000,
+        scriptType: 'wpkh',
+      },
+      { address: null, isMutable: false, toSign: false, value: 330, scriptType: 'p2a' },
+    ]);
+  });
+
+  it('throws instead of dropping an output without a script', () => {
+    const outputs = [{ script: ownerPayment.script, amount: 20_000n }, { amount: 10_000n }];
+
+    expect(() =>
+      getParsedOutputs({
+        isPsbtMutable: false,
+        outputs,
+        networkMode: 'mainnet',
+        psbtAddresses: [],
+      })
+    ).toThrow(new BitcoinError('OutputHasNoScript'));
   });
 });

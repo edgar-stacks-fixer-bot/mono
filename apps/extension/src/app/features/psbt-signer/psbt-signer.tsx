@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 
 import { PsbtSelectors } from '@tests/selectors/requests.selectors';
@@ -96,8 +96,17 @@ export function PsbtSigner(props: PsbtSignerProps) {
 
   useBreakOnNonCompliantEntity(
     'psbt_signer',
-    psbtOutputs.map(output => output.address ?? '')
+    (psbtOutputs ?? []).map(output => output.address ?? '')
   );
+
+  useEffect(() => {
+    if (psbtOutputs) return;
+    void navigate(RouteUrls.RequestError, {
+      state: { message: 'OutputHasNoScript', title: 'Failed request' },
+    });
+  }, [navigate, psbtOutputs]);
+
+  if (!psbtOutputs) return null;
 
   const psbtSignerContext: PsbtSignerContext = {
     addressNativeSegwit,
