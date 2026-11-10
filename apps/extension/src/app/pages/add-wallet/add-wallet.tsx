@@ -6,7 +6,7 @@ export function AddWallet() {
   const { submitMnemonicForm, error, isLoading, mnemonicData, clearMnemonicData } = useSignIn();
 
   return mnemonicData ? (
-    <SetPasswordPage mnemonicData={mnemonicData} onBack={clearMnemonicData} />
+    <SetPasswordPage mnemonicData={mnemonicData} onBack={clearMnemonicData} flow="restore" />
   ) : (
     <EnterMnemonic
       onSubmit={submitMnemonicForm}
