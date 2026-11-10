@@ -41,6 +41,7 @@ function Increment(props: ButtonProps) {
       onPointerLeave={handlePressOut}
       disabled={disabled || value >= max}
       icon={<PlusIcon />}
+      size="lg"
       px="space.03"
       py="space.03"
       borderLeftWidth="1px"
@@ -61,6 +62,7 @@ function Decrement(props: ButtonProps) {
       onPointerLeave={handlePressOut}
       disabled={disabled || value <= min}
       icon={<MinusIcon />}
+      size="lg"
       px="space.03"
       py="space.03"
       borderRightWidth="1px"

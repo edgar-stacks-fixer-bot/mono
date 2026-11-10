@@ -33,6 +33,13 @@ export { HoverCard } from './components/hover-card/hover-card.web';
 export { Hr, DashedHr, type HrProps } from './components/hr.web';
 export { IconButton } from './components/icon-button/icon-button.web';
 export { Input } from './components/input/input.web';
+export {
+  InlineIcon,
+  type InlineIconPlacement,
+  type InlineIconProps,
+  type InlineIconSize,
+  type InlineIconTone,
+} from './components/inline-icon/inline-icon.web';
 export { ItemLayout } from './components/item-layout/item-layout.web';
 export { ItemLayoutWithButtons } from './components/item-layout/item-layout-with-buttons.web';
 export { Link } from './components/link/link.web';

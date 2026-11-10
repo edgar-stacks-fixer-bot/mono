@@ -12,7 +12,7 @@ export function DropdownAddress({ address }: { address: string }) {
   return (
     <styled.button
       type="button"
-      onClick={() => copy(address)}
+      onClick={() => void copy(address)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       title="Copy address"

@@ -15,14 +15,17 @@ function getElementDisplayName({ type }: ReactElement) {
   return typeof type.displayName === 'string' ? type.displayName : undefined;
 }
 
-export function IconButton({ icon, label, disabled, ...rest }: IconButtonProps) {
+export function IconButton({ icon, label, disabled, size, ...rest }: IconButtonProps) {
+  const squareHeight = size ? undefined : 'headerContainerHeight';
   return (
     <Button
       key={label}
       color="ink.text-primary"
-      px={label ? 'space.01' : 'space.02'}
-      py={label ? 'space.01' : 'space.02'}
-      height={label ? 'auto' : undefined}
+      px={label ? 'space.01' : '0'}
+      py={label ? 'space.01' : '0'}
+      height={label ? 'auto' : squareHeight}
+      aspectRatio={label ? undefined : '1'}
+      size={size}
       textStyle="label.02"
       variant="ghost"
       width={label ? 'iconButtonWithLabelWidth' : 'unset'}
