@@ -38,7 +38,7 @@ export function usePsbtDetails({ inputs, indexesToSign, outputs }: UsePsbtDetail
     bitcoinAddressNativeSegwit,
     bitcoinAddressTaproot,
     parsedInputs,
-    parsedOutputs,
+    parsedOutputs: parsedOutputs ?? [],
   });
 
   const defaultToAdvancedView = useCallback(() => {

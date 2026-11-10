@@ -2,11 +2,8 @@ import { useMemo } from 'react';
 
 import type { TransactionOutput } from '@scure/btc-signer/psbt';
 
-import { getAddressFromOutScript, getBtcSignerLibNetworkConfigByMode } from '@leather.io/bitcoin';
+import { BitcoinError, getParsedOutputs } from '@leather.io/bitcoin';
 import type { NetworkConfiguration } from '@leather.io/models';
-import { isDefined, isUndefined } from '@leather.io/utils';
-
-import { logger } from '@shared/logger';
 
 import { useCurrentAccountNativeSegwitIndexZeroPayer } from '@app/store/accounts/blockchain/bitcoin/native-segwit-account.hooks';
 import { useCurrentAccountTaprootIndexZeroPayer } from '@app/store/accounts/blockchain/bitcoin/taproot-account.hooks';
@@ -23,32 +20,26 @@ interface UseParsedOutputsArgs {
   outputs: TransactionOutput[];
   network: NetworkConfiguration;
 }
-export function useParsedOutputs({ isPsbtMutable, outputs, network }: UseParsedOutputsArgs) {
+export function useParsedOutputs({
+  isPsbtMutable,
+  outputs,
+  network,
+}: UseParsedOutputsArgs): PsbtOutput[] | null {
   const bitcoinAddressNativeSegwit = useCurrentAccountNativeSegwitIndexZeroPayer().address;
   const { address: bitcoinAddressTaproot } = useCurrentAccountTaprootIndexZeroPayer();
-  const bitcoinNetwork = getBtcSignerLibNetworkConfigByMode(network.chain.bitcoin.mode);
+  const networkMode = network.chain.bitcoin.mode;
 
-  return useMemo(
-    () =>
-      outputs
-        .map(output => {
-          if (isUndefined(output.script)) {
-            logger.error('Output has no script');
-            return;
-          }
-          const outputAddress = getAddressFromOutScript(output.script, bitcoinNetwork);
-
-          const isCurrentAddress =
-            outputAddress === bitcoinAddressNativeSegwit || outputAddress === bitcoinAddressTaproot;
-
-          return {
-            address: outputAddress,
-            isMutable: isPsbtMutable,
-            toSign: isCurrentAddress,
-            value: Number(output.amount),
-          };
-        })
-        .filter(isDefined),
-    [bitcoinAddressNativeSegwit, bitcoinAddressTaproot, bitcoinNetwork, isPsbtMutable, outputs]
-  );
+  return useMemo(() => {
+    try {
+      return getParsedOutputs({
+        isPsbtMutable,
+        outputs,
+        networkMode,
+        psbtAddresses: [bitcoinAddressNativeSegwit, bitcoinAddressTaproot],
+      });
+    } catch (e) {
+      if (e instanceof BitcoinError && e.message === 'OutputHasNoScript') return null;
+      throw e;
+    }
+  }, [bitcoinAddressNativeSegwit, bitcoinAddressTaproot, networkMode, isPsbtMutable, outputs]);
 }
