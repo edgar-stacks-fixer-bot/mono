@@ -19,6 +19,15 @@ export type ComplianceScreeningPoint =
   | 'send_form_stx'
   | 'swap';
 
+export type BiometricUnlockFailureCategory =
+  | 'canceled'
+  | 'credential-mismatch'
+  | 'invalid-config'
+  | 'no-prf'
+  | 'unavailable'
+  | 'unknown'
+  | 'wallet-validation';
+
 // https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/
 export interface Events extends HistoricalEvents {
   balance_updated: {
@@ -34,6 +43,13 @@ export interface Events extends HistoricalEvents {
   wallet_restored: WalletCreatedValue;
   app_unlocked: undefined;
   app_locked: undefined;
+  biometric_unlock_enrollment_started: undefined;
+  biometric_unlock_enrollment_completed: undefined;
+  biometric_unlock_enrollment_failed: { category: BiometricUnlockFailureCategory };
+  biometric_unlock_attempt_started: undefined;
+  biometric_unlock_attempt_completed: undefined;
+  biometric_unlock_attempt_canceled: undefined;
+  biometric_unlock_attempt_failed: { category: BiometricUnlockFailureCategory };
   submit_feature_waitlist: SubmitWaitlist;
   application_first_opened: { timestamp: string };
   pooled_stacking_started: {

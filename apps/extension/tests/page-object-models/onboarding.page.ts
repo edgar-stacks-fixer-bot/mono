@@ -447,6 +447,31 @@ export class OnboardingPage {
     await this.page.getByTestId(HomePageSelectors.HomePageContainer).waitFor();
     await this.dismissFeatureIntroducer();
   }
+
+  async setUpBiometricUnlock() {
+    const biometricSetupBtn = this.page.getByTestId(OnboardingSelectors.BiometricSetupBtn);
+    await expect(biometricSetupBtn).toBeEnabled();
+    await biometricSetupBtn.click();
+    await this.page.waitForURL('**' + RouteUrls.Home);
+    await this.page.getByTestId(HomePageSelectors.HomePageContainer).waitFor();
+  }
+
+  async signUpNewUserWithBiometrics() {
+    await this.page.getByTestId(OnboardingSelectors.SignUpBtn).click();
+    await this.page.waitForURL('**' + RouteUrls.BackUpSecretKey);
+    await this.page.getByTestId(OnboardingSelectors.BackUpSecretKeyBtn).click();
+    await this.setUpBiometricUnlock();
+    await this.dismissFeatureIntroducer();
+  }
+
+  async signInExistingUserWithBiometrics(secretKey = TEST_ACCOUNT_SECRET_KEY) {
+    await this.initiateSignIn();
+    await this.enterMnemonicKey(secretKey);
+    await this.page.getByTestId(OnboardingSelectors.SignInBtn).click();
+    await this.setUpBiometricUnlock();
+    await this.dismissFeatureIntroducer();
+  }
+
   async initiateSignIn() {
     await this.page.getByTestId(OnboardingSelectors.SignInLink).click();
   }

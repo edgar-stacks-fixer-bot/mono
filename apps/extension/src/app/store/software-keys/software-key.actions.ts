@@ -10,13 +10,19 @@ import { fingerprintMigration, userAddsWallet, userRemovesWallet } from '@leathe
 import { isDefined, secondsInMs } from '@leather.io/utils';
 
 import { deriveEncryptionKey } from '@shared/crypto/generate-encryption-key';
-import { decryptMnemonic, encryptMnemonic } from '@shared/crypto/mnemonic-encryption';
+import {
+  decryptMnemonic,
+  encryptMnemonic,
+  encryptMnemonicWithEncryptionKey,
+} from '@shared/crypto/mnemonic-encryption';
 import { logger } from '@shared/logger';
 import { broadcastWalletListChanged } from '@shared/messages';
 import { assumedZeroFingerprint } from '@shared/utils';
 import { identifyUser } from '@shared/utils/analytics';
 
 import { recurseAccountsForActivity } from '@app/common/account-restoration/account-restore';
+import { clearBiometricAutomaticPromptSuppression } from '@app/common/biometric-unlock/biometric-auto-prompt';
+import { BiometricUnlockError } from '@app/common/biometric-unlock/biometric-unlock-error';
 import { getWalletSessionKey, initalizeWalletSession } from '@app/store/session-restore';
 import { type AppThunk, persistor } from '@app/store/store';
 
@@ -28,9 +34,19 @@ import { selectStacksChain } from '../chains/stx-chain.selectors';
 import { stxChainSlice } from '../chains/stx-chain.slice';
 import * as inMemoryStore from '../in-memory-key/in-memory-storage';
 import { selectAllWallets, selectWalletEntities } from '../wallets/wallet.selectors';
-import { selectSoftwareKeys, selectWalletSalt } from './software-key.selectors';
+import {
+  assertPersistedSoftwareKeyStateMatches,
+  readValidatedSoftwareKeyState,
+} from './software-key-state';
+import { selectKeysSlice, selectSoftwareKeys, selectWalletSalt } from './software-key.selectors';
 import { keySlice } from './software-key.slice';
 import { checkPassword } from './utils';
+import {
+  decryptSoftwareKeysWithEncryptionKey,
+  enrollBiometricUnlock,
+  getBiometricWalletEncryptionKey,
+} from './wallet-authentication';
+import { withWalletAuthenticationWriteLock } from './wallet-write-lock';
 
 interface AccountDiscoveryClients {
   leatherApiClient: Pick<
@@ -228,6 +244,9 @@ function setWalletEncryptionPassword(
   const { password, mnemonic, fingerprint, leatherApiClient, hiroClient, bnsClient } = args;
 
   return async (dispatch, getState) => {
+    if (selectKeysSlice(getState()).authenticationMode === 'biometric-only')
+      throw new Error('This profile is unlocked with biometrics');
+
     const softwareKeys = selectSoftwareKeys(getState());
     const hasSoftwareKeys = softwareKeys.length > 0;
 
@@ -309,9 +328,117 @@ function setWalletEncryptionPassword(
   };
 }
 
+function setWalletBiometricUnlock(
+  args: {
+    mnemonic: string;
+    fingerprint: string;
+  } & AccountDiscoveryClients
+): AppThunk {
+  const { mnemonic, fingerprint, leatherApiClient, hiroClient, bnsClient } = args;
+
+  return async (dispatch, getState) =>
+    withWalletAuthenticationWriteLock(async () => {
+      const keyState = await readValidatedSoftwareKeyState(selectKeysSlice(getState()));
+
+      if (keyState.authenticationMode === 'password')
+        throw new BiometricUnlockError('wallet-validation', 'This profile is unlocked by password');
+
+      const { encryptionKey, platformUnlock } =
+        keyState.authenticationMode === 'biometric-only'
+          ? {
+              encryptionKey: await getBiometricWalletEncryptionKey(keyState.platformUnlock),
+              platformUnlock: keyState.platformUnlock,
+            }
+          : await enrollBiometricUnlock();
+
+      const existingKeys = await decryptSoftwareKeysWithEncryptionKey(keyState.keys, encryptionKey);
+      const existingSessionKey = (await getWalletSessionKey()).data;
+      if (existingKeys.length && existingSessionKey && existingSessionKey !== encryptionKey)
+        throw new BiometricUnlockError('wallet-validation', 'Wallet session key mismatch');
+
+      const encryptedSecretKey = await encryptMnemonicWithEncryptionKey(mnemonic, encryptionKey);
+
+      await assertPersistedSoftwareKeyStateMatches(keyState);
+
+      await initalizeWalletSession(encryptionKey);
+
+      for (const key of existingKeys) inMemoryStore.setKey(key.fingerprint, key.secretKey);
+      inMemoryStore.setKey(fingerprint, mnemonic);
+
+      dispatch(
+        userAddsWallet({
+          wallet: {
+            createdOn: new Date().toISOString(),
+            fingerprint,
+            type: 'software',
+          },
+          accountKeychains: [],
+        })
+      );
+
+      dispatch(
+        keySlice.actions.biometricSoftwareWalletComplete({
+          platformUnlock,
+          key: {
+            type: 'software',
+            id: fingerprint,
+            encryptedSecretKey,
+          },
+        })
+      );
+
+      dispatch(walletKeyGenerated(fingerprint));
+
+      await persistor.flush();
+      void broadcastWalletListChanged({});
+      await clearBiometricAutomaticPromptSuppression();
+
+      startRecursiveAccountDiscovery({
+        dispatch,
+        doesAddressHaveActivityFn: createAccountActivityChecker({
+          bnsClient,
+          hiroClient,
+          leatherApiClient,
+          mnemonic,
+        }),
+        fingerprint,
+        fromAccountIndex: 0,
+      });
+    });
+}
+
+function unlockWalletWithBiometricsAction(): AppThunk {
+  return async (_dispatch, getState) => {
+    const keyState = await readValidatedSoftwareKeyState(selectKeysSlice(getState()));
+
+    if (keyState.authenticationMode !== 'biometric-only')
+      throw new BiometricUnlockError('invalid-config', 'Biometric unlock is not configured');
+
+    const encryptionKey = await getBiometricWalletEncryptionKey(keyState.platformUnlock);
+    const decryptedKeys = await decryptSoftwareKeysWithEncryptionKey(keyState.keys, encryptionKey);
+
+    await assertPersistedSoftwareKeyStateMatches(keyState);
+
+    await initalizeWalletSession(encryptionKey);
+
+    for (const { fingerprint, secretKey } of decryptedKeys) {
+      inMemoryStore.setKey(fingerprint, secretKey);
+    }
+
+    await clearBiometricAutomaticPromptSuppression();
+
+    const [firstDecryptedKey] = decryptedKeys;
+    if (!firstDecryptedKey) return;
+    const rootKey = deriveRootKeychainFromMnemonicSync(firstDecryptedKey.secretKey);
+    if (rootKey.publicKey) void identifyUser(rootKey.publicKey);
+  };
+}
+
 function unlockWalletAction(password: string): AppThunk {
   return async (dispatch, getState) => {
     const state = getState();
+    if (selectKeysSlice(state).authenticationMode === 'biometric-only')
+      throw new Error('This profile is unlocked with biometrics');
     const salt = selectWalletSalt(state);
     const softwareKeys = selectSoftwareKeys(state);
 
@@ -390,6 +517,8 @@ function unlockWalletAction(password: string): AppThunk {
 export const keyActions = {
   ...keySlice.actions,
   probeNextAccountAndDiscoverAccounts,
+  setWalletBiometricUnlock,
   setWalletEncryptionPassword,
   unlockWalletAction,
+  unlockWalletWithBiometricsAction,
 };

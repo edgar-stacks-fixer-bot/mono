@@ -231,6 +231,11 @@ export class SwitchAccountPage {
     await this.page.getByTestId(HomePageSelectors.HomePageContainer).waitFor();
   }
 
+  async confirmNewWalletWithBiometrics() {
+    await this.page.getByTestId(SettingsSelectors.BiometricUnlockBtn).click();
+    await this.page.getByTestId(HomePageSelectors.HomePageContainer).waitFor();
+  }
+
   async submitNewWalletPassword(password: string) {
     await this.page.getByTestId(OnboardingSelectors.NewPasswordInput).fill(password);
     await this.page.getByTestId(OnboardingSelectors.SetPasswordBtn).click();
