@@ -84,4 +84,20 @@ export const playgroundAreas: PlaygroundArea[] = [
     issue: 2643,
     appShell: true,
   },
+  {
+    slug: 'recipes',
+    title: 'Recipes',
+    description:
+      'Reviewed compositions of @leather.io/ui components — page, header, actions, rows, notices, QR and review sheet — in light, dark, narrow and long states.',
+    status: 'living',
+    section: 'extension',
+  },
+  {
+    slug: 'receive-example',
+    title: 'Receive example',
+    description:
+      'A fixture-only Receive flow built from the recipes, as a reference screen to copy from.',
+    status: 'living',
+    section: 'extension',
+  },
 ];
