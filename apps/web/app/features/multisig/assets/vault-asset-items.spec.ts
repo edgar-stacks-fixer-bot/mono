@@ -157,6 +157,57 @@ describe(buildVaultAssetItems.name, () => {
     expect(items.map(item => item.asset.symbol)).toEqual(['RICH', 'AAA', 'BBB']);
   });
 
+  it('marks the fiat value of a priced held asset as known', () => {
+    const meme = makeSip10Asset({
+      symbol: 'MEME',
+      assetId: 'SP9.meme::meme',
+      contractId: 'SP9.meme',
+    });
+    const items = buildVaultAssetItems([makeItem(meme, makeBalance(meme, 500, 12))], 'USD');
+    expect(items[0].isFiatUnknown).toBe(false);
+    expect(Number(items[0].fiat.amount)).toBe(12);
+  });
+
+  it('marks the fiat value of an unpriced held asset as unknown', () => {
+    const meme = makeSip10Asset({
+      symbol: 'MEME',
+      assetId: 'SP9.meme::meme',
+      contractId: 'SP9.meme',
+    });
+    const items = buildVaultAssetItems([makeItem(meme, makeBalance(meme, 500, 0))], 'USD');
+    expect(items[0].isFiatUnknown).toBe(true);
+  });
+
+  it('keeps the fiat value of a pinned zero balance known', () => {
+    const items = buildVaultAssetItems(
+      [makeItem(stxAsset), makeItem(btcAsset, makeBalance(btcAsset, 0, 0))],
+      'USD'
+    );
+    expect(items.map(item => item.isFiatUnknown)).toEqual([false, false]);
+  });
+
+  it('sorts unpriced assets as zero fiat after pinned and priced assets', () => {
+    const priced = makeSip10Asset({
+      symbol: 'PRICED',
+      assetId: 'SP9.priced::priced',
+      contractId: 'SP9.priced',
+    });
+    const unpriced = makeSip10Asset({
+      symbol: 'AAA',
+      assetId: 'SP9.aaa::aaa',
+      contractId: 'SP9.aaa',
+    });
+    const items = buildVaultAssetItems(
+      [
+        makeItem(unpriced, makeBalance(unpriced, 1_000_000, 0)),
+        makeItem(priced, makeBalance(priced, 1, 5)),
+        makeItem(stxAsset),
+      ],
+      'USD'
+    );
+    expect(items.map(item => item.asset.symbol)).toEqual(['STX', 'PRICED', 'AAA']);
+  });
+
   it('keeps a lone zero-balance BTC row for bitcoin vaults', () => {
     const items = buildVaultAssetItems([makeItem(btcAsset)], 'USD');
     expect(items.map(item => item.asset.symbol)).toEqual(['BTC']);

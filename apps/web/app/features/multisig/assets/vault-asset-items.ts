@@ -7,6 +7,7 @@ export interface VaultAssetItem {
   asset: FungibleCryptoAsset;
   crypto: Money;
   fiat: Money;
+  isFiatUnknown: boolean;
 }
 
 function isPinnedVaultAsset(asset: FungibleCryptoAsset) {
@@ -15,6 +16,10 @@ function isPinnedVaultAsset(asset: FungibleCryptoAsset) {
 
 function hasPositiveBalance(item: AssetListItem) {
   return item.balance !== undefined && Number(item.balance.crypto.totalBalance.amount) > 0;
+}
+
+function isUnpricedHeldBalance(item: AssetListItem) {
+  return hasPositiveBalance(item) && !item.balance?.quote.totalBalance.amount.isGreaterThan(0);
 }
 
 function compareVaultAssetItems(a: VaultAssetItem, b: VaultAssetItem) {
@@ -40,6 +45,7 @@ export function buildVaultAssetItems(
       crypto:
         item.balance?.crypto.totalBalance ?? createMoney(0, item.asset.symbol, item.asset.decimals),
       fiat: item.balance?.quote.totalBalance ?? createMoney(0, quoteCurrency),
+      isFiatUnknown: isUnpricedHeldBalance(item),
     }))
     .sort(compareVaultAssetItems);
 }
