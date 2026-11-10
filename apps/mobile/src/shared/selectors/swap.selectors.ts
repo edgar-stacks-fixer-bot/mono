@@ -1,0 +1,15 @@
+export const SwapSelectors = {
+  AssetSelector: 'swapAssetSelector',
+  AssetSelectorItem: 'swapAssetSelectorItem',
+  BaseAssetToggle: 'swapBaseAssetToggle',
+  ConfirmButton: 'swapConfirmButton',
+  FlipButton: 'swapFlipButton',
+  InfoButton: 'swapInfoButton',
+  InfoSheet: 'swapInfoSheet',
+  ReviewButton: 'swapReviewButton',
+  ReviewDetails: 'swapReviewDetails',
+  SlippageSheet: 'swapSlippageSheet',
+  SlippageToggle: 'swapSlippageToggle',
+  TargetAssetToggle: 'swapTargetAssetToggle',
+  UpdateSlippageButton: 'swapUpdateSlippageButton',
+} as const;

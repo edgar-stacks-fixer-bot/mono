@@ -2,7 +2,7 @@ import { useRef } from 'react';
 
 import { Screen } from '@/components/screen/screen';
 import { RecoverWalletSheet } from '@/features/wallet-manager/recover-wallet/recover-wallet-sheet';
-import { TestId } from '@/shared/test-id';
+import { OnboardingSelectors } from '@/shared/selectors/onboarding.selectors';
 import { t } from '@lingui/core/macro';
 
 import {
@@ -46,10 +46,12 @@ export function RecoverWalletLayout({
 
           <Accordion
             label={t`Advanced options`}
+            testID={OnboardingSelectors.RestoreWalletAdvancedOptions}
             content={
               <Box mx="-5">
                 <Cell.Root
                   pressable
+                  testID={OnboardingSelectors.RestoreWalletPassphraseCell}
                   onPress={() => {
                     recoverWalletSheetRef.current?.present();
                   }}
@@ -83,7 +85,7 @@ export function RecoverWalletLayout({
         <Button
           onPress={onSubmit}
           disabled={isButtonDisabled}
-          testID={TestId.restoreWalletContinue}
+          testID={OnboardingSelectors.RestoreWalletContinue}
         >
           {t`Continue`}
         </Button>
