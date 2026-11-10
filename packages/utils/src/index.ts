@@ -20,6 +20,7 @@ export * from './assets/balance-helpers';
 export * from './assets/asset-id';
 export * from './assets/sip10-name-overrides';
 export * from './truncate-middle';
+export * from './format-bytes';
 export * from './time';
 export * from './market-data';
 export * from './currency-formatter/currency-formatter';
