@@ -9,6 +9,8 @@ import { AddressDisplayer, Button, Sheet, SheetHeader, ShieldIcon } from '@leath
 
 import { ButtonRow } from '@app/components/layout';
 
+import { ReceiveNetworkBadge } from './receive-network-badge';
+
 interface ReceiveTokensLayoutProps {
   address: string;
   accountName?: string;
@@ -88,6 +90,7 @@ export function ReceiveTokensLayout(props: ReceiveTokensLayoutProps) {
           </Flex>
         </Box>
         <Flex alignItems="center" flexDirection="column">
+          <ReceiveNetworkBadge mt="space.05" />
           {accountName && (
             <styled.span mt="space.05" textStyle="label.01">
               {accountName}

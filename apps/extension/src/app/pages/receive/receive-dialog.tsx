@@ -16,6 +16,7 @@ import {
 import { useCurrentPolicy } from '@app/store/policy/policy.selectors';
 
 import { ReceiveCollectibles } from './components/receive-collectibles';
+import { ReceiveNetworkBadge } from './components/receive-network-badge';
 import { ReceiveTokens } from './components/receive-tokens';
 import { ReceiveBtcModal } from './receive-btc';
 import { ReceiveStxModal } from './receive-stx';
@@ -76,6 +77,7 @@ function ReceiveSheet({ type = 'full', onChangeView, onClose }: ReceiveSheetProp
       onClose={onClose}
       isShowing
     >
+      <ReceiveNetworkBadge justifyContent="center" mb="space.04" />
       {type === 'collectible' && <Collectibles />}
       {type === 'full' && (
         <Tabs.Root defaultValue="tokens">
