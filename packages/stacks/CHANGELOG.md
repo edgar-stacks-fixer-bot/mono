@@ -577,6 +577,44 @@
     * @leather.io/models bumped to 0.44.1
     * @leather.io/utils bumped to 0.46.4
 
+## [1.23.0](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/stacks-v1.22.9...@leather.io/stacks-v1.23.0) (2026-11-13)
+
+
+### Features
+
+* add new postconditions ([#2422](https://github.com/edgar-stacks-fixer-bot/mono/issues/2422)) ([2416d06](https://github.com/edgar-stacks-fixer-bot/mono/commit/2416d0668a194e0de7ede0c724238b92cb361e81))
+* build multisig transfer transactions ([#2418](https://github.com/edgar-stacks-fixer-bot/mono/issues/2418)) ([c72b145](https://github.com/edgar-stacks-fixer-bot/mono/commit/c72b1453cffbcbaa3d972823ce173bc10cb85731))
+* **extension:** support originator post-condition mode ([#2324](https://github.com/edgar-stacks-fixer-bot/mono/issues/2324)) ([6e7d3e1](https://github.com/edgar-stacks-fixer-bot/mono/commit/6e7d3e11b5d18a576c72fe4886f5ead6376d9d16))
+* multisig activity ([#2482](https://github.com/edgar-stacks-fixer-bot/mono/issues/2482)) ([864d9a6](https://github.com/edgar-stacks-fixer-bot/mono/commit/864d9a6774a758396c97bb6bca2923d0fef45960))
+* multisig sip10 transfers ([#2502](https://github.com/edgar-stacks-fixer-bot/mono/issues/2502)) ([4550325](https://github.com/edgar-stacks-fixer-bot/mono/commit/455032542e11e1d13eb40b8567feddd060f528c7))
+* multisig tx signing ([#2431](https://github.com/edgar-stacks-fixer-bot/mono/issues/2431)) ([1997d3d](https://github.com/edgar-stacks-fixer-bot/mono/commit/1997d3d8bb0314ef4fd4104fb3303a600a46b0e7))
+* policy account state ([#2430](https://github.com/edgar-stacks-fixer-bot/mono/issues/2430)) ([01e4ea0](https://github.com/edgar-stacks-fixer-bot/mono/commit/01e4ea07d67a8dbf4209912aa1c14304b770d521))
+* tx proposal in extension via rpc requests ([#2472](https://github.com/edgar-stacks-fixer-bot/mono/issues/2472)) ([ef5f7d2](https://github.com/edgar-stacks-fixer-bot/mono/commit/ef5f7d202e1d78862d350443fe622732db25961e))
+* **web:** support custom private regtest network for multisig internal testing ([#2476](https://github.com/edgar-stacks-fixer-bot/mono/issues/2476)) ([143950b](https://github.com/edgar-stacks-fixer-bot/mono/commit/143950b3c49711ac643a3e04ae4b5bec6fa63572))
+* **web:** transactions list + details, proposal + sign flow ([#2435](https://github.com/edgar-stacks-fixer-bot/mono/issues/2435)) ([a878d5f](https://github.com/edgar-stacks-fixer-bot/mono/commit/a878d5fe3d392b10c787d9a39f94553e59be018a))
+
+
+### Bug Fixes
+
+* add ledger derivation paths ([#2592](https://github.com/edgar-stacks-fixer-bot/mono/issues/2592)) ([94806ea](https://github.com/edgar-stacks-fixer-bot/mono/commit/94806eaffddabc4a2e1d6c29fa405979e8170c95))
+* body-parser and undici audit ([#2912](https://github.com/edgar-stacks-fixer-bot/mono/issues/2912)) ([2bee4e7](https://github.com/edgar-stacks-fixer-bot/mono/commit/2bee4e772dd95fff8406822a62225854fb708fbd))
+* clarity 6 contract deployment ([#2545](https://github.com/edgar-stacks-fixer-bot/mono/issues/2545)) ([2c04085](https://github.com/edgar-stacks-fixer-bot/mono/commit/2c0408553bdad021dad7430beb81d22cf565c95d))
+* **mobile:** return sponsored contract calls to the app without error ([#2811](https://github.com/edgar-stacks-fixer-bot/mono/issues/2811)) ([0012105](https://github.com/edgar-stacks-fixer-bot/mono/commit/00121054e400c7de2302e205fbc30f14965cbce7))
+* networks bug ([#2379](https://github.com/edgar-stacks-fixer-bot/mono/issues/2379)) ([01d0c87](https://github.com/edgar-stacks-fixer-bot/mono/commit/01d0c87860b18ff5952cac03a12f42f8f9b9165a))
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @leather.io/crypto bumped to 1.14.0
+    * @leather.io/models bumped to 0.64.0
+    * @leather.io/utils bumped to 0.56.0
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+    * @leather.io/test-config bumped to 0.1.5
+
 ## [1.22.9](https://github.com/leather-io/mono/compare/@leather.io/stacks-v1.22.8...@leather.io/stacks-v1.22.9) (2026-10-27)
 
 

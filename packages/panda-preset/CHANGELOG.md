@@ -252,6 +252,23 @@
   * devDependencies
     * @leather.io/tokens bumped to 0.23.1
 
+## [0.16.7](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/panda-preset-v0.16.6...@leather.io/panda-preset-v0.16.7) (2026-11-13)
+
+
+### Bug Fixes
+
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+* **ui:** repair default callout contrast and link underline and focus states ([#2800](https://github.com/edgar-stacks-fixer-bot/mono/issues/2800)) ([32d87f8](https://github.com/edgar-stacks-fixer-bot/mono/commit/32d87f8973cb71e06ebe7fc55c7a47fa94a6557f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+    * @leather.io/tokens bumped to 0.29.0
+    * @leather.io/tsconfig-config bumped to 0.11.3
+
 ## [0.16.6](https://github.com/leather-io/mono/compare/@leather.io/panda-preset-v0.16.5...@leather.io/panda-preset-v0.16.6) (2026-10-27)
 
 

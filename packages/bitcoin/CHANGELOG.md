@@ -939,6 +939,58 @@
     * @leather.io/prettier-config bumped to 0.9.0
     * @leather.io/rpc bumped to 2.20.17
 
+## [0.43.0](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/bitcoin-v0.42.1...@leather.io/bitcoin-v0.43.0) (2026-11-13)
+
+
+### Features
+
+* auth infrastructure ([#2368](https://github.com/edgar-stacks-fixer-bot/mono/issues/2368)) ([f3d4b3e](https://github.com/edgar-stacks-fixer-bot/mono/commit/f3d4b3e91e86f0d69606c21f67985b3eed762f1f))
+* bond exit ([#2648](https://github.com/edgar-stacks-fixer-bot/mono/issues/2648)) ([289275f](https://github.com/edgar-stacks-fixer-bot/mono/commit/289275f169a4b0563d2fec662e48c9a844792bf3))
+* build multisig transfer transactions ([#2418](https://github.com/edgar-stacks-fixer-bot/mono/issues/2418)) ([c72b145](https://github.com/edgar-stacks-fixer-bot/mono/commit/c72b1453cffbcbaa3d972823ce173bc10cb85731))
+* fully move to dmk btc/stx dmk packages ([#2763](https://github.com/edgar-stacks-fixer-bot/mono/issues/2763)) ([c4bb5f3](https://github.com/edgar-stacks-fixer-bot/mono/commit/c4bb5f39ed9f2ff88ce59c325e86dda0cb87568b))
+* multisig tx signing ([#2431](https://github.com/edgar-stacks-fixer-bot/mono/issues/2431)) ([1997d3d](https://github.com/edgar-stacks-fixer-bot/mono/commit/1997d3d8bb0314ef4fd4104fb3303a600a46b0e7))
+* policy account state ([#2430](https://github.com/edgar-stacks-fixer-bot/mono/issues/2430)) ([01e4ea0](https://github.com/edgar-stacks-fixer-bot/mono/commit/01e4ea07d67a8dbf4209912aa1c14304b770d521))
+* policy accounts ([#2438](https://github.com/edgar-stacks-fixer-bot/mono/issues/2438)) ([08d3861](https://github.com/edgar-stacks-fixer-bot/mono/commit/08d3861dfd5cced3ae2cd23b547007b84a83a5b9))
+* spending sources foundation + btc send flow ([#2820](https://github.com/edgar-stacks-fixer-bot/mono/issues/2820)) ([181c4f7](https://github.com/edgar-stacks-fixer-bot/mono/commit/181c4f71366f1cb4a744ae04d261f1fa63d75f30))
+* tx proposal in extension via rpc requests ([#2472](https://github.com/edgar-stacks-fixer-bot/mono/issues/2472)) ([ef5f7d2](https://github.com/edgar-stacks-fixer-bot/mono/commit/ef5f7d202e1d78862d350443fe622732db25961e))
+* **web:** support custom private regtest network for multisig internal testing ([#2476](https://github.com/edgar-stacks-fixer-bot/mono/issues/2476)) ([143950b](https://github.com/edgar-stacks-fixer-bot/mono/commit/143950b3c49711ac643a3e04ae4b5bec6fa63572))
+
+
+### Bug Fixes
+
+* add @stacks/connect ([#2580](https://github.com/edgar-stacks-fixer-bot/mono/issues/2580)) ([625b20b](https://github.com/edgar-stacks-fixer-bot/mono/commit/625b20b6a68ee0c1bba63e892b46b837561b71e9))
+* add non zero index signing for descriptor mode in signPsbt ([#2382](https://github.com/edgar-stacks-fixer-bot/mono/issues/2382)) ([ad289a7](https://github.com/edgar-stacks-fixer-bot/mono/commit/ad289a7a03b0bc11042b3e335b58b8d39d2e0cf6))
+* add support for tpubs ([#2381](https://github.com/edgar-stacks-fixer-bot/mono/issues/2381)) ([09d4c94](https://github.com/edgar-stacks-fixer-bot/mono/commit/09d4c944af9b0f74bb15379382d47ad45f11832f))
+* **bitcoin:** accept multi form in bond descriptor matching ([#2673](https://github.com/edgar-stacks-fixer-bot/mono/issues/2673)) ([77ad173](https://github.com/edgar-stacks-fixer-bot/mono/commit/77ad1735df93eec653557a807bf2ab4b9c9503d5))
+* bitcoinjs-lib audit ([#2959](https://github.com/edgar-stacks-fixer-bot/mono/issues/2959)) ([47f9582](https://github.com/edgar-stacks-fixer-bot/mono/commit/47f95825a09be6f4ae695e0a2c62bf3268febb30))
+* **bitcoin:** resolve the bond co-signer as an extended key so ledger can sign ([#2674](https://github.com/edgar-stacks-fixer-bot/mono/issues/2674)) ([7828c5b](https://github.com/edgar-stacks-fixer-bot/mono/commit/7828c5b4db6273f03873239138a5589f2296fc2b))
+* **bitcoin:** verify psbt consistency in wsh descriptor finalization ([#2701](https://github.com/edgar-stacks-fixer-bot/mono/issues/2701)) ([68e36b4](https://github.com/edgar-stacks-fixer-bot/mono/commit/68e36b4e1e43a96e1343d1506e3c279829c5d6eb))
+* body-parser and undici audit ([#2912](https://github.com/edgar-stacks-fixer-bot/mono/issues/2912)) ([2bee4e7](https://github.com/edgar-stacks-fixer-bot/mono/commit/2bee4e772dd95fff8406822a62225854fb708fbd))
+* enforce runtime circular dependency detection ([#2852](https://github.com/edgar-stacks-fixer-bot/mono/issues/2852)) ([857e0f7](https://github.com/edgar-stacks-fixer-bot/mono/commit/857e0f79d75025cc0da9f31a78c875fa64ed5eba))
+* **extension:** block psbt signing with disallowed sighash types ([#2667](https://github.com/edgar-stacks-fixer-bot/mono/issues/2667)) ([9b4d0f4](https://github.com/edgar-stacks-fixer-bot/mono/commit/9b4d0f46d6e77cbbda5da1b519ae853514fd1c30))
+* **extension:** classify psbt inputs by script type when building signing config ([#2680](https://github.com/edgar-stacks-fixer-bot/mono/issues/2680)) ([263e3c2](https://github.com/edgar-stacks-fixer-bot/mono/commit/263e3c28d3975ee0e0fb2ec8607421a75c81230b))
+* **extension:** ledger testnet address verification ([#2649](https://github.com/edgar-stacks-fixer-bot/mono/issues/2649)) ([f16cc57](https://github.com/edgar-stacks-fixer-bot/mono/commit/f16cc5757b7300c58f6ee2c05e56644e5d737a00))
+* implement wsh signing in signPsbt ([#2374](https://github.com/edgar-stacks-fixer-bot/mono/issues/2374)) ([82f6216](https://github.com/edgar-stacks-fixer-bot/mono/commit/82f621646a4ff619e31090be9eb24ec148866349))
+* **mobile:** signPsbt issues ([#2478](https://github.com/edgar-stacks-fixer-bot/mono/issues/2478)) ([bfdeb52](https://github.com/edgar-stacks-fixer-bot/mono/commit/bfdeb52641b522ecc537e1d853d35102b4645e0f))
+* remove runes/ordinals pages from services/models ([#2358](https://github.com/edgar-stacks-fixer-bot/mono/issues/2358)) ([101bf28](https://github.com/edgar-stacks-fixer-bot/mono/commit/101bf2808285991f40d93e6eaad00f32c4435675))
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+* update ledger dependencies ([#2661](https://github.com/edgar-stacks-fixer-bot/mono/issues/2661)) ([7ef2061](https://github.com/edgar-stacks-fixer-bot/mono/commit/7ef20613d3a4858da6f6102bb586bbb370201e4b))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @leather.io/constants bumped to 0.42.0
+    * @leather.io/crypto bumped to 1.14.0
+    * @leather.io/models bumped to 0.64.0
+    * @leather.io/utils bumped to 0.56.0
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+    * @leather.io/rpc bumped to 2.26.0
+    * @leather.io/test-config bumped to 0.1.5
+    * @leather.io/tsconfig-config bumped to 0.11.3
+
 ## [0.42.1](https://github.com/leather-io/mono/compare/@leather.io/bitcoin-v0.42.0...@leather.io/bitcoin-v0.42.1) (2026-10-27)
 
 

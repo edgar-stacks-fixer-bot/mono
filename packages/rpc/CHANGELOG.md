@@ -411,6 +411,44 @@
     * @leather.io/stacks bumped to 1.17.3
     * @leather.io/utils bumped to 0.46.4
 
+## [2.26.0](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/rpc-v2.25.4...@leather.io/rpc-v2.26.0) (2026-11-13)
+
+
+### Features
+
+* add btc/stx_addAccount rpc approver flow ([#2421](https://github.com/edgar-stacks-fixer-bot/mono/issues/2421)) ([e3cd9b4](https://github.com/edgar-stacks-fixer-bot/mono/commit/e3cd9b45eab45eef54446943adfb3830522ee7ed))
+* add new postconditions ([#2422](https://github.com/edgar-stacks-fixer-bot/mono/issues/2422)) ([2416d06](https://github.com/edgar-stacks-fixer-bot/mono/commit/2416d0668a194e0de7ede0c724238b92cb361e81))
+* bond exit ([#2648](https://github.com/edgar-stacks-fixer-bot/mono/issues/2648)) ([289275f](https://github.com/edgar-stacks-fixer-bot/mono/commit/289275f169a4b0563d2fec662e48c9a844792bf3))
+* **extension:** add wallet fingerprint to getAddresses ([#2499](https://github.com/edgar-stacks-fixer-bot/mono/issues/2499)) ([8e13787](https://github.com/edgar-stacks-fixer-bot/mono/commit/8e13787b37de92b334ea98dbb371ac03c622848f))
+* **extension:** support originator post-condition mode ([#2324](https://github.com/edgar-stacks-fixer-bot/mono/issues/2324)) ([6e7d3e1](https://github.com/edgar-stacks-fixer-bot/mono/commit/6e7d3e11b5d18a576c72fe4886f5ead6376d9d16))
+* policy account state ([#2430](https://github.com/edgar-stacks-fixer-bot/mono/issues/2430)) ([01e4ea0](https://github.com/edgar-stacks-fixer-bot/mono/commit/01e4ea07d67a8dbf4209912aa1c14304b770d521))
+* policy accounts ([#2438](https://github.com/edgar-stacks-fixer-bot/mono/issues/2438)) ([08d3861](https://github.com/edgar-stacks-fixer-bot/mono/commit/08d3861dfd5cced3ae2cd23b547007b84a83a5b9))
+* tx proposal in extension via rpc requests ([#2472](https://github.com/edgar-stacks-fixer-bot/mono/issues/2472)) ([ef5f7d2](https://github.com/edgar-stacks-fixer-bot/mono/commit/ef5f7d202e1d78862d350443fe622732db25961e))
+* update sendTransfer params ([#2634](https://github.com/edgar-stacks-fixer-bot/mono/issues/2634)) ([344da46](https://github.com/edgar-stacks-fixer-bot/mono/commit/344da46f4608c9e431522e99e5326af916deb499))
+* **web:** support custom private regtest network for multisig internal testing ([#2476](https://github.com/edgar-stacks-fixer-bot/mono/issues/2476)) ([143950b](https://github.com/edgar-stacks-fixer-bot/mono/commit/143950b3c49711ac643a3e04ae4b5bec6fa63572))
+
+
+### Bug Fixes
+
+* account name cap ([#2534](https://github.com/edgar-stacks-fixer-bot/mono/issues/2534)) ([e52375b](https://github.com/edgar-stacks-fixer-bot/mono/commit/e52375b3cadc5522f9034a040833b9044200fe19))
+* body-parser and undici audit ([#2912](https://github.com/edgar-stacks-fixer-bot/mono/issues/2912)) ([2bee4e7](https://github.com/edgar-stacks-fixer-bot/mono/commit/2bee4e772dd95fff8406822a62225854fb708fbd))
+* **extension:** block psbt signing with disallowed sighash types ([#2667](https://github.com/edgar-stacks-fixer-bot/mono/issues/2667)) ([9b4d0f4](https://github.com/edgar-stacks-fixer-bot/mono/commit/9b4d0f46d6e77cbbda5da1b519ae853514fd1c30))
+* implement wsh signing in signPsbt ([#2374](https://github.com/edgar-stacks-fixer-bot/mono/issues/2374)) ([82f6216](https://github.com/edgar-stacks-fixer-bot/mono/commit/82f621646a4ff619e31090be9eb24ec148866349))
+* no keychain warning ([#2537](https://github.com/edgar-stacks-fixer-bot/mono/issues/2537)) ([17549ee](https://github.com/edgar-stacks-fixer-bot/mono/commit/17549ee7b2b8b141bbd66b576495ae5ef33f0da0))
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @leather.io/models bumped to 0.64.0
+    * @leather.io/stacks bumped to 1.23.0
+    * @leather.io/utils bumped to 0.56.0
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+    * @leather.io/test-config bumped to 0.1.5
+
 ## [2.25.4](https://github.com/leather-io/mono/compare/@leather.io/rpc-v2.25.3...@leather.io/rpc-v2.25.4) (2026-10-27)
 
 

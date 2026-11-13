@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.9.0](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/features-v1.8.6...@leather.io/features-v1.9.0) (2026-11-13)
+
+
+### Features
+
+* add new activity list ([#2555](https://github.com/edgar-stacks-fixer-bot/mono/issues/2555)) ([7d5f88a](https://github.com/edgar-stacks-fixer-bot/mono/commit/7d5f88a8f5af565d381c231a401842462263c322))
+* blockchain activity paging and view mapping ([#2473](https://github.com/edgar-stacks-fixer-bot/mono/issues/2473)) ([a279b9e](https://github.com/edgar-stacks-fixer-bot/mono/commit/a279b9eaaee43587bc7894b5b7288a748758c15c))
+* distinguish multisig cancelled activity items ([#2660](https://github.com/edgar-stacks-fixer-bot/mono/issues/2660)) ([4dc3931](https://github.com/edgar-stacks-fixer-bot/mono/commit/4dc3931374c6529b833d7e98e231e23e0bd78b23))
+* **extension:** add collectible details pages and manage inscriptions ([26fc7a9](https://github.com/edgar-stacks-fixer-bot/mono/commit/26fc7a925ec71720735abd9dc9e105472301c777))
+* multisig activity ([#2482](https://github.com/edgar-stacks-fixer-bot/mono/issues/2482)) ([864d9a6](https://github.com/edgar-stacks-fixer-bot/mono/commit/864d9a6774a758396c97bb6bca2923d0fef45960))
+* **web:** playground design surface + multisig content refinements ([#2527](https://github.com/edgar-stacks-fixer-bot/mono/issues/2527)) ([#2532](https://github.com/edgar-stacks-fixer-bot/mono/issues/2532)) ([6580b89](https://github.com/edgar-stacks-fixer-bot/mono/commit/6580b892a307bca0f66db2b159ea656d3998af19))
+
+
+### Bug Fixes
+
+* activity view drift revert ([#2645](https://github.com/edgar-stacks-fixer-bot/mono/issues/2645)) ([a4677e0](https://github.com/edgar-stacks-fixer-bot/mono/commit/a4677e08a42feedd38fb6a9cf7344dfc7f3b2af5))
+* remove runes/ordinals from ui packages ([#2353](https://github.com/edgar-stacks-fixer-bot/mono/issues/2353)) ([709dbb5](https://github.com/edgar-stacks-fixer-bot/mono/commit/709dbb53a38f221b2befc73191e44c952bee4c49))
+* remove runes/ordinals pages from services/models ([#2358](https://github.com/edgar-stacks-fixer-bot/mono/issues/2358)) ([101bf28](https://github.com/edgar-stacks-fixer-bot/mono/commit/101bf2808285991f40d93e6eaad00f32c4435675))
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+* staking testnet network ([#2801](https://github.com/edgar-stacks-fixer-bot/mono/issues/2801)) ([20fe188](https://github.com/edgar-stacks-fixer-bot/mono/commit/20fe1889a867e9ecffb7c20ef7b5a2364e53b43b))
+* **web:** private network resolution, regtest explorer links, activity polling ([#2663](https://github.com/edgar-stacks-fixer-bot/mono/issues/2663)) ([243071c](https://github.com/edgar-stacks-fixer-bot/mono/commit/243071c811e4966f52cef00f67c0a5cba21ec3ad))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @leather.io/constants bumped to 0.42.0
+    * @leather.io/models bumped to 0.64.0
+    * @leather.io/services bumped to 1.67.0
+    * @leather.io/stacks bumped to 1.23.0
+    * @leather.io/tokens bumped to 0.29.0
+    * @leather.io/utils bumped to 0.56.0
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+    * @leather.io/test-config bumped to 0.1.5
+    * @leather.io/tsconfig-config bumped to 0.11.3
+
 ## [1.8.6](https://github.com/leather-io/mono/compare/@leather.io/features-v1.8.5...@leather.io/features-v1.8.6) (2026-10-27)
 
 

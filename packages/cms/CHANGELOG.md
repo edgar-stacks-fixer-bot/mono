@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.7.0](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/cms-v1.6.4...@leather.io/cms-v1.7.0) (2026-11-13)
+
+
+### Features
+
+* **cms:** add fully CMS-driven learn sections ([dc0ed7a](https://github.com/edgar-stacks-fixer-bot/mono/commit/dc0ed7a350d2f4be1f88c9e117531eea00257110))
+
+
+### Bug Fixes
+
+* body-parser and undici audit ([#2912](https://github.com/edgar-stacks-fixer-bot/mono/issues/2912)) ([2bee4e7](https://github.com/edgar-stacks-fixer-bot/mono/commit/2bee4e772dd95fff8406822a62225854fb708fbd))
+* remove runes/ordinals pages from services/models ([#2358](https://github.com/edgar-stacks-fixer-bot/mono/issues/2358)) ([101bf28](https://github.com/edgar-stacks-fixer-bot/mono/commit/101bf2808285991f40d93e6eaad00f32c4435675))
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+* sunset basic sbtc rewards ([#2698](https://github.com/edgar-stacks-fixer-bot/mono/issues/2698)) ([745d583](https://github.com/edgar-stacks-fixer-bot/mono/commit/745d58317d430b8efe6bf1a7783dd086824fc6f5))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+
 ## [1.6.4](https://github.com/leather-io/mono/compare/@leather.io/cms-v1.6.3...@leather.io/cms-v1.6.4) (2026-10-27)
 
 

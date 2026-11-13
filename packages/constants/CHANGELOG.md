@@ -215,6 +215,38 @@
   * devDependencies
     * @leather.io/prettier-config bumped to 0.9.0
 
+## [0.42.0](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/constants-v0.41.0...@leather.io/constants-v0.42.0) (2026-11-13)
+
+
+### Features
+
+* add new activity list ([#2555](https://github.com/edgar-stacks-fixer-bot/mono/issues/2555)) ([7d5f88a](https://github.com/edgar-stacks-fixer-bot/mono/commit/7d5f88a8f5af565d381c231a401842462263c322))
+* **cms:** add fully CMS-driven learn sections ([dc0ed7a](https://github.com/edgar-stacks-fixer-bot/mono/commit/dc0ed7a350d2f4be1f88c9e117531eea00257110))
+* delete legacy requests ([#2612](https://github.com/edgar-stacks-fixer-bot/mono/issues/2612)) ([c17d65f](https://github.com/edgar-stacks-fixer-bot/mono/commit/c17d65fc12fd799ff045d6fb725b57b50462fd84))
+* **extension:** add aeUSDC retirement callout ([#2336](https://github.com/edgar-stacks-fixer-bot/mono/issues/2336)) ([a2f8423](https://github.com/edgar-stacks-fixer-bot/mono/commit/a2f8423fae4074f952a016b249c291674c7878fa))
+* **extension:** new swaps flow with sBTC bridging ([#2554](https://github.com/edgar-stacks-fixer-bot/mono/issues/2554)) ([65c8518](https://github.com/edgar-stacks-fixer-bot/mono/commit/65c85186c847b2e99fd062d00997c81932268bc5))
+* pin sBTC and USDCx after BTC and STX in token lists ([#2858](https://github.com/edgar-stacks-fixer-bot/mono/issues/2858)) ([12d4c39](https://github.com/edgar-stacks-fixer-bot/mono/commit/12d4c398445f690c714d16e4198b8a4ec47f9566))
+* policy account state ([#2430](https://github.com/edgar-stacks-fixer-bot/mono/issues/2430)) ([01e4ea0](https://github.com/edgar-stacks-fixer-bot/mono/commit/01e4ea07d67a8dbf4209912aa1c14304b770d521))
+
+
+### Bug Fixes
+
+* add support for tpubs ([#2381](https://github.com/edgar-stacks-fixer-bot/mono/issues/2381)) ([09d4c94](https://github.com/edgar-stacks-fixer-bot/mono/commit/09d4c944af9b0f74bb15379382d47ad45f11832f))
+* **auth:** bind sign-in message to requesting domain ([#2690](https://github.com/edgar-stacks-fixer-bot/mono/issues/2690)) ([dfb58cb](https://github.com/edgar-stacks-fixer-bot/mono/commit/dfb58cb5e85b2a10f89d830c5e3269c458dc6564))
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+* **web:** cap multisig member/vault names and truncate account address ([#2544](https://github.com/edgar-stacks-fixer-bot/mono/issues/2544)) ([ed3697c](https://github.com/edgar-stacks-fixer-bot/mono/commit/ed3697cb98d1e31997302798ba4cc994cb856617))
+* **web:** unblock footer links under the connect overlay and retire Advanced Earn ([#2731](https://github.com/edgar-stacks-fixer-bot/mono/issues/2731)) ([7c4ac69](https://github.com/edgar-stacks-fixer-bot/mono/commit/7c4ac6979a7f9f656bc7caf709fd61c521f504b8))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @leather.io/models bumped to 0.64.0
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+    * @leather.io/tsconfig-config bumped to 0.11.3
+
 ## [0.41.0](https://github.com/leather-io/mono/compare/@leather.io/constants-v0.40.0...@leather.io/constants-v0.41.0) (2026-10-27)
 
 

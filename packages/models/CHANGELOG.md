@@ -36,6 +36,49 @@
   * devDependencies
     * @leather.io/prettier-config bumped to 0.9.0
 
+## [0.64.0](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/models-v0.63.1...@leather.io/models-v0.64.0) (2026-11-13)
+
+
+### Features
+
+* add BNS testnet support ([#2733](https://github.com/edgar-stacks-fixer-bot/mono/issues/2733)) ([8f92aa3](https://github.com/edgar-stacks-fixer-bot/mono/commit/8f92aa3b6d0f87f765f7de98eeecfe24e2bd2939))
+* allow custom fee for transaction proposal from multisig account ([#2773](https://github.com/edgar-stacks-fixer-bot/mono/issues/2773)) ([cc45d87](https://github.com/edgar-stacks-fixer-bot/mono/commit/cc45d8779c65c5333ba56bfe5cbf187df8b6c88a))
+* auth infrastructure ([#2368](https://github.com/edgar-stacks-fixer-bot/mono/issues/2368)) ([f3d4b3e](https://github.com/edgar-stacks-fixer-bot/mono/commit/f3d4b3e91e86f0d69606c21f67985b3eed762f1f))
+* blockchain activity paging and view mapping ([#2473](https://github.com/edgar-stacks-fixer-bot/mono/issues/2473)) ([a279b9e](https://github.com/edgar-stacks-fixer-bot/mono/commit/a279b9eaaee43587bc7894b5b7288a748758c15c))
+* build multisig transfer transactions ([#2418](https://github.com/edgar-stacks-fixer-bot/mono/issues/2418)) ([c72b145](https://github.com/edgar-stacks-fixer-bot/mono/commit/c72b1453cffbcbaa3d972823ce173bc10cb85731))
+* **extension:** fee service usage in extension ([f295794](https://github.com/edgar-stacks-fixer-bot/mono/commit/f29579434d4291805dc1010faeac863dcadaaf5f))
+* **extension:** new swaps flow with sBTC bridging ([#2554](https://github.com/edgar-stacks-fixer-bot/mono/issues/2554)) ([65c8518](https://github.com/edgar-stacks-fixer-bot/mono/commit/65c85186c847b2e99fd062d00997c81932268bc5))
+* multisig fixed address account ([#2415](https://github.com/edgar-stacks-fixer-bot/mono/issues/2415)) ([964ff42](https://github.com/edgar-stacks-fixer-bot/mono/commit/964ff421f0b83ca688859f9bae7d2863adc9c183))
+* multisig service transactions ([#2404](https://github.com/edgar-stacks-fixer-bot/mono/issues/2404)) ([8c3a1d4](https://github.com/edgar-stacks-fixer-bot/mono/commit/8c3a1d41b09c1caf4f526ac9b567d479c1436c40))
+* multisig tx signing ([#2431](https://github.com/edgar-stacks-fixer-bot/mono/issues/2431)) ([1997d3d](https://github.com/edgar-stacks-fixer-bot/mono/commit/1997d3d8bb0314ef4fd4104fb3303a600a46b0e7))
+* **services:** activity v2 ([ae29c23](https://github.com/edgar-stacks-fixer-bot/mono/commit/ae29c23a6001bffc5ab81c89400e2d9768930478))
+* **services:** add signedByMe field to multisig tx summary ([#2496](https://github.com/edgar-stacks-fixer-bot/mono/issues/2496)) ([1a70094](https://github.com/edgar-stacks-fixer-bot/mono/commit/1a700948a3ad74b1b8c944a39268754c2006bf75))
+* **services:** bitcoin staking balances and positions service ([#2714](https://github.com/edgar-stacks-fixer-bot/mono/issues/2714)) ([695400d](https://github.com/edgar-stacks-fixer-bot/mono/commit/695400d198c48641ec00395ffe33562cafd35f66))
+* **services:** multisig service accounts ([#2383](https://github.com/edgar-stacks-fixer-bot/mono/issues/2383)) ([5a0513e](https://github.com/edgar-stacks-fixer-bot/mono/commit/5a0513e1c077a5b62ed49aff04d1e946c4d1ea22))
+* **services:** multisig service vaults ([#2378](https://github.com/edgar-stacks-fixer-bot/mono/issues/2378)) ([4351c6c](https://github.com/edgar-stacks-fixer-bot/mono/commit/4351c6c26b256fd4007d70020bc588bf109f7b89))
+* **web:** multisig vaults UI (create, view, invites) ([#2385](https://github.com/edgar-stacks-fixer-bot/mono/issues/2385)) ([8d55381](https://github.com/edgar-stacks-fixer-bot/mono/commit/8d55381d7a0d90a2ab36f70f528b174ae79d251f))
+* **web:** show nonce on multisig transaction details ([#2635](https://github.com/edgar-stacks-fixer-bot/mono/issues/2635)) ([b482b2d](https://github.com/edgar-stacks-fixer-bot/mono/commit/b482b2db89de8218130ef26a3d5893e91f6a6dd9))
+* **web:** support custom private regtest network for multisig internal testing ([#2476](https://github.com/edgar-stacks-fixer-bot/mono/issues/2476)) ([143950b](https://github.com/edgar-stacks-fixer-bot/mono/commit/143950b3c49711ac643a3e04ae4b5bec6fa63572))
+
+
+### Bug Fixes
+
+* add @stacks/connect ([#2580](https://github.com/edgar-stacks-fixer-bot/mono/issues/2580)) ([625b20b](https://github.com/edgar-stacks-fixer-bot/mono/commit/625b20b6a68ee0c1bba63e892b46b837561b71e9))
+* add private-1 network ([#2650](https://github.com/edgar-stacks-fixer-bot/mono/issues/2650)) ([32c5518](https://github.com/edgar-stacks-fixer-bot/mono/commit/32c5518aa8410cf03f55365c53c617171980b166))
+* body-parser and undici audit ([#2912](https://github.com/edgar-stacks-fixer-bot/mono/issues/2912)) ([2bee4e7](https://github.com/edgar-stacks-fixer-bot/mono/commit/2bee4e772dd95fff8406822a62225854fb708fbd))
+* enforce runtime circular dependency detection ([#2852](https://github.com/edgar-stacks-fixer-bot/mono/issues/2852)) ([857e0f7](https://github.com/edgar-stacks-fixer-bot/mono/commit/857e0f79d75025cc0da9f31a78c875fa64ed5eba))
+* remove runes/ordinals pages from services/models ([#2358](https://github.com/edgar-stacks-fixer-bot/mono/issues/2358)) ([101bf28](https://github.com/edgar-stacks-fixer-bot/mono/commit/101bf2808285991f40d93e6eaad00f32c4435675))
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+* staking testnet network ([#2801](https://github.com/edgar-stacks-fixer-bot/mono/issues/2801)) ([20fe188](https://github.com/edgar-stacks-fixer-bot/mono/commit/20fe1889a867e9ecffb7c20ef7b5a2364e53b43b))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+    * @leather.io/tsconfig-config bumped to 0.11.3
+
 ## [0.63.1](https://github.com/leather-io/mono/compare/@leather.io/models-v0.63.0...@leather.io/models-v0.63.1) (2026-10-27)
 
 

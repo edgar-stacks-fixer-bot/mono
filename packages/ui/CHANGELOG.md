@@ -489,6 +489,71 @@
   * devDependencies
     * @leather.io/models bumped to 0.41.0
 
+## [1.120.0](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/ui-v1.119.4...@leather.io/ui-v1.120.0) (2026-11-13)
+
+
+### Features
+
+* add new activity list ([#2555](https://github.com/edgar-stacks-fixer-bot/mono/issues/2555)) ([7d5f88a](https://github.com/edgar-stacks-fixer-bot/mono/commit/7d5f88a8f5af565d381c231a401842462263c322))
+* address verification ([#2549](https://github.com/edgar-stacks-fixer-bot/mono/issues/2549)) ([4965f2d](https://github.com/edgar-stacks-fixer-bot/mono/commit/4965f2d8e71b93a286f7cd1ab6f04493dbe7cfa8))
+* distinguish multisig cancelled activity items ([#2660](https://github.com/edgar-stacks-fixer-bot/mono/issues/2660)) ([4dc3931](https://github.com/edgar-stacks-fixer-bot/mono/commit/4dc3931374c6529b833d7e98e231e23e0bd78b23))
+* **extension:** bitcoin staking balances and positions UI ([#2715](https://github.com/edgar-stacks-fixer-bot/mono/issues/2715)) ([0af16a8](https://github.com/edgar-stacks-fixer-bot/mono/commit/0af16a8f1ac9509cf94a351f8f667ba5c2b85a83))
+* **extension:** first token ([a945df1](https://github.com/edgar-stacks-fixer-bot/mono/commit/a945df1e5bef1f884d3a1c670f7f5485376d6d2b))
+* **mobile:** token presets and a hidden tokens pill under the list ([#2859](https://github.com/edgar-stacks-fixer-bot/mono/issues/2859)) ([9e71d62](https://github.com/edgar-stacks-fixer-bot/mono/commit/9e71d6218aca02385ab98330c9ff90c8e85bd2fe))
+* multisig activity ([#2482](https://github.com/edgar-stacks-fixer-bot/mono/issues/2482)) ([864d9a6](https://github.com/edgar-stacks-fixer-bot/mono/commit/864d9a6774a758396c97bb6bca2923d0fef45960))
+* multiwallet UI ([#2356](https://github.com/edgar-stacks-fixer-bot/mono/issues/2356)) ([34e7419](https://github.com/edgar-stacks-fixer-bot/mono/commit/34e7419c4a870546500e3896d2ec2890fe309f33))
+* **ui:** add popover web component ([a44473c](https://github.com/edgar-stacks-fixer-bot/mono/commit/a44473c136eb1946466527f2a4e4d8150b14847e))
+* **ui:** add web version of numeric input ([ac33307](https://github.com/edgar-stacks-fixer-bot/mono/commit/ac33307dd5f41f79ea7733efaba8537dcf5ab222))
+* **web:** launch polish for multisig onboarding, nav icon and install button ([#2729](https://github.com/edgar-stacks-fixer-bot/mono/issues/2729)) ([bc8e964](https://github.com/edgar-stacks-fixer-bot/mono/commit/bc8e9646bec9aa202b988db716e14d0d94f8899c))
+* **web:** Leather Multisig UI (initial import, behind multisigEnabled flag) ([#2365](https://github.com/edgar-stacks-fixer-bot/mono/issues/2365)) ([872827d](https://github.com/edgar-stacks-fixer-bot/mono/commit/872827d28f3f848595958f197df22df6b580dd81))
+* **web:** multisig design QA — list-item consistency + UI polish ([#2471](https://github.com/edgar-stacks-fixer-bot/mono/issues/2471)) ([79a4034](https://github.com/edgar-stacks-fixer-bot/mono/commit/79a403405eb7034d9856de09c1640d04efa55b84))
+* **web:** multisig per-chain connection-status dropdown ([#2376](https://github.com/edgar-stacks-fixer-bot/mono/issues/2376)) ([98b810b](https://github.com/edgar-stacks-fixer-bot/mono/commit/98b810b51d8b9c9994978d10637cf30ecb7662d6))
+* **web:** multisig vault details, accounts + balances ([#2403](https://github.com/edgar-stacks-fixer-bot/mono/issues/2403)) ([4a3fc3f](https://github.com/edgar-stacks-fixer-bot/mono/commit/4a3fc3f39bc10615952b4748cc26621a76febc5e))
+* **web:** playground design surface + multisig content refinements ([#2527](https://github.com/edgar-stacks-fixer-bot/mono/issues/2527)) ([#2532](https://github.com/edgar-stacks-fixer-bot/mono/issues/2532)) ([6580b89](https://github.com/edgar-stacks-fixer-bot/mono/commit/6580b892a307bca0f66db2b159ea656d3998af19))
+* **web:** staking UI pass — position rows, provider table, shared address chips ([#2568](https://github.com/edgar-stacks-fixer-bot/mono/issues/2568)) ([d98bd9a](https://github.com/edgar-stacks-fixer-bot/mono/commit/d98bd9a61b2f066041082b85256da9a96519d7b6))
+
+
+### Bug Fixes
+
+* add all balances settings tab ([#2552](https://github.com/edgar-stacks-fixer-bot/mono/issues/2552)) ([1ef1c33](https://github.com/edgar-stacks-fixer-bot/mono/commit/1ef1c33ecb393f6e2d87f0829773e88e7a59fcfa))
+* bring back ordinal banners and make those dismissable ([#2615](https://github.com/edgar-stacks-fixer-bot/mono/issues/2615)) ([c085334](https://github.com/edgar-stacks-fixer-bot/mono/commit/c08533430f9b6bfd7c18f8e03b4151e2ec13cd91))
+* clipboard in multisig vault invites ([#2530](https://github.com/edgar-stacks-fixer-bot/mono/issues/2530)) ([8e04bfb](https://github.com/edgar-stacks-fixer-bot/mono/commit/8e04bfbead39ff2d437385bb26667158103aff9d))
+* **extension:** account picker, header & logo visual polish (LEA-3591, LEA-3589, LEA-3594) ([#2411](https://github.com/edgar-stacks-fixer-bot/mono/issues/2411)) ([9a54be2](https://github.com/edgar-stacks-fixer-bot/mono/commit/9a54be237891d601dc7110e106589c2c51f5d502))
+* **extension:** correct disabled swap button outline and add explanatory tooltip ([#2429](https://github.com/edgar-stacks-fixer-bot/mono/issues/2429)) ([0b2bf4f](https://github.com/edgar-stacks-fixer-bot/mono/commit/0b2bf4ff2ebe55d33fb6d9acfc5168a16986c6ec))
+* **extension:** keep update notice readable and add toast countdown ring ([#2861](https://github.com/edgar-stacks-fixer-bot/mono/issues/2861)) ([aa8c75a](https://github.com/edgar-stacks-fixer-bot/mono/commit/aa8c75a6fa6a0b87a720b3fbb0ed596af0aeef56))
+* **extension:** make deposits pressable ([831a1f3](https://github.com/edgar-stacks-fixer-bot/mono/commit/831a1f3c2603ad9422d9bbe9008d72599ce24fa6))
+* **extension:** refine collectibles tab typography and spacing ([509e784](https://github.com/edgar-stacks-fixer-bot/mono/commit/509e78416099d4e90f47bb89eacd4abc474ee84a))
+* **extension:** refine token list typography, spacing, and hover radius ([05871e1](https://github.com/edgar-stacks-fixer-bot/mono/commit/05871e1686e292760caba72286afd8ecf24781bd))
+* **extension:** tidy up the multi-wallet account row in approval views ([#2433](https://github.com/edgar-stacks-fixer-bot/mono/issues/2433)) ([8ff20d9](https://github.com/edgar-stacks-fixer-bot/mono/commit/8ff20d9fe5e34dff42e149926b823b91e54626a3))
+* **extension:** update collectible design ([7902c68](https://github.com/edgar-stacks-fixer-bot/mono/commit/7902c68a97f6883c17b83f0935d125fa227ee78d))
+* multisig pre-release design QA pass ([#2670](https://github.com/edgar-stacks-fixer-bot/mono/issues/2670)) ([c14d933](https://github.com/edgar-stacks-fixer-bot/mono/commit/c14d933f0c29778e8583fc64fd9273e10c27f764))
+* remove runes/ordinals from ui packages ([#2353](https://github.com/edgar-stacks-fixer-bot/mono/issues/2353)) ([709dbb5](https://github.com/edgar-stacks-fixer-bot/mono/commit/709dbb53a38f221b2befc73191e44c952bee4c49))
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+* swaps ui improvements ([#2758](https://github.com/edgar-stacks-fixer-bot/mono/issues/2758)) ([be4e2cf](https://github.com/edgar-stacks-fixer-bot/mono/commit/be4e2cfa261d803c24eb504f675713f5e2235673))
+* **ui:** improve switch on/off contrast and add focus ring ([e621993](https://github.com/edgar-stacks-fixer-bot/mono/commit/e6219935ea01f11a8928d284187a309ae4b0e098))
+* **ui:** prevent avatar from shrinking in flex rows ([#2791](https://github.com/edgar-stacks-fixer-bot/mono/issues/2791)) ([00a23a3](https://github.com/edgar-stacks-fixer-bot/mono/commit/00a23a331e56593ad9394579bb478eda1bfd5537))
+* **ui:** render item layout chevron direction with dedicated icons ([#2792](https://github.com/edgar-stacks-fixer-bot/mono/issues/2792)) ([aace9d8](https://github.com/edgar-stacks-fixer-bot/mono/commit/aace9d8a2061b9bd8d6fe094351b751c64237929))
+* **ui:** repair default callout contrast and link underline and focus states ([#2800](https://github.com/edgar-stacks-fixer-bot/mono/issues/2800)) ([32d87f8](https://github.com/edgar-stacks-fixer-bot/mono/commit/32d87f8973cb71e06ebe7fc55c7a47fa94a6557f))
+* **ui:** truncate long titles in item layout with ellipsis ([#2360](https://github.com/edgar-stacks-fixer-bot/mono/issues/2360)) ([58cf921](https://github.com/edgar-stacks-fixer-bot/mono/commit/58cf92115f5ccffa6c0bfd847ec85026e85d5880))
+* **ui:** use blue.border instead of lightModeBlue.500 for switch focus ring ([a2da5b1](https://github.com/edgar-stacks-fixer-bot/mono/commit/a2da5b143fd942ba7c61214f0e1bd01abf09a9a1))
+* **ui:** use correct spacings for numeric input elements ([5f91542](https://github.com/edgar-stacks-fixer-bot/mono/commit/5f9154259e841b5e2b043c17ae92417d9cd1f69a))
+* **web:** rework staking payout selection, hover cards and form radii ([#2558](https://github.com/edgar-stacks-fixer-bot/mono/issues/2558)) ([612c860](https://github.com/edgar-stacks-fixer-bot/mono/commit/612c860fa18934819ddac0c14f25c01d31fee58d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @leather.io/tokens bumped to 0.29.0
+    * @leather.io/utils bumped to 0.56.0
+  * devDependencies
+    * @leather.io/features bumped to 1.9.0
+    * @leather.io/models bumped to 0.64.0
+    * @leather.io/panda-preset bumped to 0.16.7
+    * @leather.io/prettier-config bumped to 0.9.2
+    * @leather.io/test-config bumped to 0.1.5
+    * @leather.io/tsconfig-config bumped to 0.11.3
+
 ## [1.119.4](https://github.com/leather-io/mono/compare/@leather.io/ui-v1.119.3...@leather.io/ui-v1.119.4) (2026-10-27)
 
 

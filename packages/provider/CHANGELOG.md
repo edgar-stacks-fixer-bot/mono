@@ -350,6 +350,28 @@
     * @leather.io/rpc bumped to 2.20.16
     * @leather.io/utils bumped to 0.46.3
 
+## [1.8.0](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/provider-v1.7.6...@leather.io/provider-v1.8.0) (2026-11-13)
+
+
+### Features
+
+* delete legacy requests ([#2612](https://github.com/edgar-stacks-fixer-bot/mono/issues/2612)) ([c17d65f](https://github.com/edgar-stacks-fixer-bot/mono/commit/c17d65fc12fd799ff045d6fb725b57b50462fd84))
+
+
+### Bug Fixes
+
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @leather.io/rpc bumped to 2.26.0
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+    * @leather.io/test-config bumped to 0.1.5
+
 ## [1.7.6](https://github.com/leather-io/mono/compare/@leather.io/provider-v1.7.5...@leather.io/provider-v1.7.6) (2026-10-27)
 
 

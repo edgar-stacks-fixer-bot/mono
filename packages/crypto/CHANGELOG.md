@@ -492,6 +492,33 @@
   * dependencies
     * @leather.io/utils bumped to 0.46.4
 
+## [1.14.0](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/crypto-v1.13.11...@leather.io/crypto-v1.14.0) (2026-11-13)
+
+
+### Features
+
+* multisig service transactions ([#2404](https://github.com/edgar-stacks-fixer-bot/mono/issues/2404)) ([8c3a1d4](https://github.com/edgar-stacks-fixer-bot/mono/commit/8c3a1d41b09c1caf4f526ac9b567d479c1436c40))
+* multiwallet UI ([#2356](https://github.com/edgar-stacks-fixer-bot/mono/issues/2356)) ([34e7419](https://github.com/edgar-stacks-fixer-bot/mono/commit/34e7419c4a870546500e3896d2ec2890fe309f33))
+
+
+### Bug Fixes
+
+* account lookup ([#2416](https://github.com/edgar-stacks-fixer-bot/mono/issues/2416)) ([a250a30](https://github.com/edgar-stacks-fixer-bot/mono/commit/a250a30a2be396846c9af017c3ac94eeb7a92fc6))
+* add ledger derivation paths ([#2592](https://github.com/edgar-stacks-fixer-bot/mono/issues/2592)) ([94806ea](https://github.com/edgar-stacks-fixer-bot/mono/commit/94806eaffddabc4a2e1d6c29fa405979e8170c95))
+* add support for tpubs ([#2381](https://github.com/edgar-stacks-fixer-bot/mono/issues/2381)) ([09d4c94](https://github.com/edgar-stacks-fixer-bot/mono/commit/09d4c944af9b0f74bb15379382d47ad45f11832f))
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @leather.io/constants bumped to 0.42.0
+    * @leather.io/utils bumped to 0.56.0
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+    * @leather.io/test-config bumped to 0.1.5
+
 ## [1.13.11](https://github.com/leather-io/mono/compare/@leather.io/crypto-v1.13.10...@leather.io/crypto-v1.13.11) (2026-10-27)
 
 

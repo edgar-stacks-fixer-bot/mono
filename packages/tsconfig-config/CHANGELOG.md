@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.11.3](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/tsconfig-config-v0.11.2...@leather.io/tsconfig-config-v0.11.3) (2026-11-13)
+
+
+### Bug Fixes
+
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+
 ## [0.11.2](https://github.com/leather-io/mono/compare/@leather.io/tsconfig-config-v0.11.1...@leather.io/tsconfig-config-v0.11.2) (2026-09-29)
 
 

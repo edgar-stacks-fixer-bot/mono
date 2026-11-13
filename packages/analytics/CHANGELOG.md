@@ -114,6 +114,42 @@
   * devDependencies
     * @leather.io/models bumped to 0.44.1
 
+## [3.27.0](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/analytics-v3.26.1...@leather.io/analytics-v3.27.0) (2026-11-13)
+
+
+### Features
+
+* add pox-5 staking ([#2539](https://github.com/edgar-stacks-fixer-bot/mono/issues/2539)) ([f348a4d](https://github.com/edgar-stacks-fixer-bot/mono/commit/f348a4d7123f6445c64a617438f944f8cdcf9cb4))
+* address verification ([#2549](https://github.com/edgar-stacks-fixer-bot/mono/issues/2549)) ([4965f2d](https://github.com/edgar-stacks-fixer-bot/mono/commit/4965f2d8e71b93a286f7cd1ab6f04493dbe7cfa8))
+* delete legacy requests ([#2612](https://github.com/edgar-stacks-fixer-bot/mono/issues/2612)) ([c17d65f](https://github.com/edgar-stacks-fixer-bot/mono/commit/c17d65fc12fd799ff045d6fb725b57b50462fd84))
+* **extension:** deprecation of ordinals and runes ([d6e1fea](https://github.com/edgar-stacks-fixer-bot/mono/commit/d6e1feaccb47de540983c9263cb198f279ed7679))
+* **extension:** new swaps flow with sBTC bridging ([#2554](https://github.com/edgar-stacks-fixer-bot/mono/issues/2554)) ([65c8518](https://github.com/edgar-stacks-fixer-bot/mono/commit/65c85186c847b2e99fd062d00997c81932268bc5))
+* **extension:** tell users when a new version is available ([#2793](https://github.com/edgar-stacks-fixer-bot/mono/issues/2793)) ([6ef500a](https://github.com/edgar-stacks-fixer-bot/mono/commit/6ef500afb68f502e3de3873d55397ca9ed4bd45e))
+* migrate compliance check call to new service ([#2484](https://github.com/edgar-stacks-fixer-bot/mono/issues/2484)) ([b410f39](https://github.com/edgar-stacks-fixer-bot/mono/commit/b410f39a9f3e490dd35bded04d73bdf8f4bb3533))
+* **mobile:** token presets and a hidden tokens pill under the list ([#2859](https://github.com/edgar-stacks-fixer-bot/mono/issues/2859)) ([9e71d62](https://github.com/edgar-stacks-fixer-bot/mono/commit/9e71d6218aca02385ab98330c9ff90c8e85bd2fe))
+* **services:** replace chainalysis with leather api compliance endpoint ([#2606](https://github.com/edgar-stacks-fixer-bot/mono/issues/2606)) ([ac3a931](https://github.com/edgar-stacks-fixer-bot/mono/commit/ac3a931ed2dec18d52dd3832450fb59f4dc5282d))
+* token price history graph ([#2764](https://github.com/edgar-stacks-fixer-bot/mono/issues/2764)) ([b7c56bc](https://github.com/edgar-stacks-fixer-bot/mono/commit/b7c56bc7eb49b3a38ea7f40c6332e6c5ce390f93))
+* tx proposal in extension via rpc requests ([#2472](https://github.com/edgar-stacks-fixer-bot/mono/issues/2472)) ([ef5f7d2](https://github.com/edgar-stacks-fixer-bot/mono/commit/ef5f7d202e1d78862d350443fe622732db25961e))
+* **web:** update-stake signer-manager switching ([#2657](https://github.com/edgar-stacks-fixer-bot/mono/issues/2657)) ([5b7f7d8](https://github.com/edgar-stacks-fixer-bot/mono/commit/5b7f7d8f0cf948a1d23bd08ee5843274b073e701))
+
+
+### Bug Fixes
+
+* add all balances settings tab ([#2552](https://github.com/edgar-stacks-fixer-bot/mono/issues/2552)) ([1ef1c33](https://github.com/edgar-stacks-fixer-bot/mono/commit/1ef1c33ecb393f6e2d87f0829773e88e7a59fcfa))
+* add ledger derivation paths ([#2592](https://github.com/edgar-stacks-fixer-bot/mono/issues/2592)) ([94806ea](https://github.com/edgar-stacks-fixer-bot/mono/commit/94806eaffddabc4a2e1d6c29fa405979e8170c95))
+* legacy requests callout / analytics ([236e016](https://github.com/edgar-stacks-fixer-bot/mono/commit/236e01633d5b26871f2d89eeb61ede098d646240))
+* remove runes/ordinals pages from services/models ([#2358](https://github.com/edgar-stacks-fixer-bot/mono/issues/2358)) ([101bf28](https://github.com/edgar-stacks-fixer-bot/mono/commit/101bf2808285991f40d93e6eaad00f32c4435675))
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @leather.io/models bumped to 0.64.0
+    * @leather.io/prettier-config bumped to 0.9.2
+    * @leather.io/test-config bumped to 0.1.5
+
 ## [3.26.1](https://github.com/leather-io/mono/compare/@leather.io/analytics-v3.26.0...@leather.io/analytics-v3.26.1) (2026-10-27)
 
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.14.5](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/eslint-config-v0.14.4...@leather.io/eslint-config-v0.14.5) (2026-11-13)
+
+
+### Bug Fixes
+
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+
 ## [0.14.4](https://github.com/leather-io/mono/compare/@leather.io/eslint-config-v0.14.3...@leather.io/eslint-config-v0.14.4) (2026-09-29)
 
 

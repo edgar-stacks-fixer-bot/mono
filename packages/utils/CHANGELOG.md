@@ -368,6 +368,37 @@
   * devDependencies
     * @leather.io/prettier-config bumped to 0.9.0
 
+## [0.56.0](https://github.com/edgar-stacks-fixer-bot/mono/compare/@leather.io/utils-v0.55.0...@leather.io/utils-v0.56.0) (2026-11-13)
+
+
+### Features
+
+* **extension:** new swaps flow with sBTC bridging ([#2554](https://github.com/edgar-stacks-fixer-bot/mono/issues/2554)) ([65c8518](https://github.com/edgar-stacks-fixer-bot/mono/commit/65c85186c847b2e99fd062d00997c81932268bc5))
+* multisig fixed address account ([#2415](https://github.com/edgar-stacks-fixer-bot/mono/issues/2415)) ([964ff42](https://github.com/edgar-stacks-fixer-bot/mono/commit/964ff421f0b83ca688859f9bae7d2863adc9c183))
+* multiwallet UI ([#2356](https://github.com/edgar-stacks-fixer-bot/mono/issues/2356)) ([34e7419](https://github.com/edgar-stacks-fixer-bot/mono/commit/34e7419c4a870546500e3896d2ec2890fe309f33))
+* pin sBTC and USDCx after BTC and STX in token lists ([#2858](https://github.com/edgar-stacks-fixer-bot/mono/issues/2858)) ([12d4c39](https://github.com/edgar-stacks-fixer-bot/mono/commit/12d4c398445f690c714d16e4198b8a4ec47f9566))
+* **services:** bitcoin staking balances and positions service ([#2714](https://github.com/edgar-stacks-fixer-bot/mono/issues/2714)) ([695400d](https://github.com/edgar-stacks-fixer-bot/mono/commit/695400d198c48641ec00395ffe33562cafd35f66))
+
+
+### Bug Fixes
+
+* enforce runtime circular dependency detection ([#2852](https://github.com/edgar-stacks-fixer-bot/mono/issues/2852)) ([857e0f7](https://github.com/edgar-stacks-fixer-bot/mono/commit/857e0f79d75025cc0da9f31a78c875fa64ed5eba))
+* remove runes/ordinals pages from services/models ([#2358](https://github.com/edgar-stacks-fixer-bot/mono/issues/2358)) ([101bf28](https://github.com/edgar-stacks-fixer-bot/mono/commit/101bf2808285991f40d93e6eaad00f32c4435675))
+* remove senseinode temporarily ([#2765](https://github.com/edgar-stacks-fixer-bot/mono/issues/2765)) ([6035d9b](https://github.com/edgar-stacks-fixer-bot/mono/commit/6035d9b5d68bcfd91959b671c6551b34c490ef4d))
+* swaps performance ([#2761](https://github.com/edgar-stacks-fixer-bot/mono/issues/2761)) ([797e1d1](https://github.com/edgar-stacks-fixer-bot/mono/commit/797e1d1b449f9f24fe8a1d2b7077f7afd19a7bb8))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @leather.io/constants bumped to 0.42.0
+    * @leather.io/models bumped to 0.64.0
+  * devDependencies
+    * @leather.io/prettier-config bumped to 0.9.2
+    * @leather.io/test-config bumped to 0.1.5
+    * @leather.io/tsconfig-config bumped to 0.11.3
+
 ## [0.55.0](https://github.com/leather-io/mono/compare/@leather.io/utils-v0.54.0...@leather.io/utils-v0.55.0) (2026-10-27)
 
 
