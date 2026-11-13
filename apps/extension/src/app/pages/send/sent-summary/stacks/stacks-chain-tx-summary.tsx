@@ -1,5 +1,6 @@
 import { type StacksTransactionWire, isTokenTransferPayload } from '@stacks/transactions';
 
+import { getSbtcSponsoredTransferDetails } from '@leather.io/stacks';
 import { baseCurrencyAmountInQuote, createMoney, isNumber, sumMoney } from '@leather.io/utils';
 
 import { formatCurrency } from '@app/common/currency-formatter';
@@ -15,6 +16,7 @@ import {
   getTokenTransferMemoDisplayText,
   safeAddressToString,
 } from '@app/common/transactions/stacks/transaction.utils';
+import { createSbtcMoney } from '@app/features/sbtc-sponsorship/sbtc-sponsorship.utils';
 import { TxStatusBadge } from '@app/features/tx-status-badge/tx-status-badge';
 import { useCryptoCurrencyMarketData } from '@app/query/common/market-data/market-data.hooks';
 import { useGetFungibleTokenMetadataQuery } from '@app/query/stacks/token-metadata/fungible-tokens/fungible-token-metadata.query';
@@ -91,6 +93,30 @@ export function Sip10SentSummary({ txid, symbol, tx }: StacksChainSummaryProps) 
         ['Fee', formatCurrency(fee)],
         ['Memo', memo],
         ['Nonce', getNonceFromStacksTransaction(tx)],
+      ]}
+    />
+  );
+}
+
+export function SbtcSponsoredSentSummary({ txid, symbol, tx }: StacksChainSummaryProps) {
+  const details = getSbtcSponsoredTransferDetails(tx);
+  if (!details) return null;
+
+  const amount = createSbtcMoney(details.amount.toString());
+  const fee = createSbtcMoney(details.fee.toString());
+
+  return (
+    <StacksChainTxSummaryLayout
+      token={symbol}
+      txid={txid}
+      value={amount}
+      recipient={details.recipient}
+      metadata={[
+        ['Status', <TxStatusBadge key={txid} txid={txid} />],
+        ['Total spend', formatCurrency(sumMoney([amount, fee]))],
+        ['Sending', formatCurrency(amount)],
+        ['Fee', formatCurrency(fee)],
+        ['Memo', details.memo || '—'],
       ]}
     />
   );

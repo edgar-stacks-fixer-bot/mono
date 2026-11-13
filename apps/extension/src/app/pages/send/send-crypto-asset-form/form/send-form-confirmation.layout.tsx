@@ -15,6 +15,7 @@ import {
 import { Card } from '@app/components/layout';
 
 interface SendFormConfirmationLayoutProps {
+  callout?: React.ReactNode;
   recipient?: string | null;
   fee?: Money;
   totalSpend: string;
@@ -31,6 +32,7 @@ interface SendFormConfirmationLayoutProps {
   onBroadcastTransaction(): void;
 }
 export function SendFormConfirmationLayout({
+  callout,
   txValue,
   txFiatValue,
   txFiatValueSymbol,
@@ -73,6 +75,8 @@ export function SendFormConfirmationLayout({
         symbol={symbol}
         value={txValue}
       />
+
+      {callout}
 
       {principalType === 'standard' && (
         <Callout variant="info" title="Sending to an exchange?" px="space.03" mb="space.05">

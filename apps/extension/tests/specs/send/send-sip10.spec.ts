@@ -18,6 +18,13 @@ test.describe('Send sip10', () => {
     await sendPage.selectSip10AndGoToSendForm(leatherTestTokenTestId);
   });
 
+  test('charges the fee of a non-sBTC token in STX without a sponsored badge', async ({
+    sendPage,
+  }) => {
+    await expect(sendPage.feeToBePaid).toContainText('STX');
+    await expect(sendPage.sponsoredFeeBadge).toHaveCount(0);
+  });
+
   test('can send sip10 token', async ({ sendPage }) => {
     await sendPage.amountInput.fill(amount);
     await sendPage.recipientInput.fill(TEST_ACCOUNT_2_STX_ADDRESS);

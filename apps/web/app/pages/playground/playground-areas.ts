@@ -84,4 +84,12 @@ export const playgroundAreas: PlaygroundArea[] = [
     issue: 2643,
     appShell: true,
   },
+  {
+    slug: 'sbtc-sponsorship-flows',
+    title: 'sBTC sponsorship flows',
+    description:
+      'Click-through mocks of sending sBTC with a sponsored fee paid in sBTC, and of a planned two-transaction bundle that sponsors arbitrary contract calls.',
+    status: 'exploration',
+    section: 'extension',
+  },
 ];

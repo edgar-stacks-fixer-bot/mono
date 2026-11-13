@@ -36,6 +36,8 @@ export const SendCryptoAssetSelectors = {
   SpendSourcesTaprootCallout: 'spend-sources-taproot-callout',
   SpendSourcesNativeSegwitRow: 'spend-sources-native-segwit-row',
   SpendSourcesTaprootRow: 'spend-sources-taproot-row',
+
+  SbtcFeeRequoteCallout: 'sbtc-fee-requote-callout',
 } as const;
 export type SendCryptoAssetSelectors =
   (typeof SendCryptoAssetSelectors)[keyof typeof SendCryptoAssetSelectors];
