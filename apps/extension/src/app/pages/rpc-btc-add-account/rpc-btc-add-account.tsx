@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 
 import { ConnectAccountSelectors } from '@tests/selectors/requests.selectors';
+import { SharedComponentsSelectors } from '@tests/selectors/shared-component.selectors';
 import { styled } from 'leather-styles/jsx';
 
 import { AddressDisplayer, Approver, Button, Callout } from '@leather.io/ui';
@@ -8,13 +9,32 @@ import { AddressDisplayer, Approver, Button, Callout } from '@leather.io/ui';
 import { closeWindow } from '@shared/utils';
 
 import { useSwitchAccountSheet } from '@app/common/switch-account/use-switch-account-sheet-context';
+import {
+  BondSpendingConditions,
+  type BondSpendingConditionsDetails,
+} from '@app/components/bond-spending-conditions/bond-spending-conditions';
 import { CrossOriginFrameCallout } from '@app/components/cross-origin-frame-callout';
 import { CurrentAccountDisplayer } from '@app/features/current-account/current-account-displayer';
 import { useLedgerFlow } from '@app/features/ledger/flow/ledger-flow.context';
+import { ledgerRawKeyUnsupportedMessage } from '@app/features/ledger/utils/ledger-descriptor-address';
 import { useOnOriginTabClose } from '@app/routes/hooks/use-on-tab-closed';
 
 import { policyCallout, verifyModeCalloutMessage } from '../policy-match';
 import { useBtcAddAccount } from './use-btc-add-account';
+
+const timelockedVerifyCalloutMessage =
+  "Timelocked addresses can't be added to your wallet. You're only verifying the address.";
+
+function getHeaderTitle(isTimelocked: boolean, isVerifyMode: boolean) {
+  if (isTimelocked) return 'Verify timelocked address';
+  return isVerifyMode ? 'Verify multisig address' : 'Add multisig account';
+}
+
+function getCalloutSubject(vaultKind: BondSpendingConditionsDetails['vaultKind'] | undefined) {
+  if (vaultKind === 'pk') return 'this timelocked address';
+  if (vaultKind === 'multi') return 'this vault';
+  return undefined;
+}
 
 export function RpcBtcAddAccount() {
   const {
@@ -24,6 +44,8 @@ export function RpcBtcAddAccount() {
     address,
     matchStatus,
     mode,
+    timelocked,
+    isLedgerUnsupported,
     walletType,
     canApprove,
     focusInitiatingTab,
@@ -65,47 +87,76 @@ export function RpcBtcAddAccount() {
 
   const isVerifyMode = mode === 'verify';
   const confirmLabel = `${isVerifyMode ? 'Verify' : 'Confirm'}${walletType === 'ledger' ? ' on Ledger' : ''}`;
-  const callout = policyCallout(matchStatus, 'Bitcoin');
+  const callout = policyCallout(matchStatus, 'Bitcoin', getCalloutSubject(timelocked?.vaultKind));
 
   return (
     <Approver requester={origin} width="100%">
       <CrossOriginFrameCallout mb="space.03" width="100%" />
       <Approver.Header
-        title={isVerifyMode ? 'Verify multisig address' : 'Add multisig account'}
+        title={getHeaderTitle(timelocked !== null, isVerifyMode)}
         onPressRequestedByLink={focusInitiatingTab}
       />
-      {isVerifyMode && (
+      {timelocked ? (
+        <Approver.Section>
+          <Callout variant="info" mt="space.03">
+            {timelockedVerifyCalloutMessage}
+          </Callout>
+        </Approver.Section>
+      ) : null}
+      {isVerifyMode && !timelocked ? (
         <Approver.Section>
           <Callout variant="warning" mt="space.03">
             {verifyModeCalloutMessage}
           </Callout>
         </Approver.Section>
-      )}
+      ) : null}
       <Approver.Section>
-        <Approver.Subheader>Multisig address</Approver.Subheader>
+        <Approver.Subheader>
+          {timelocked ? 'Timelocked address' : 'Multisig address'}
+        </Approver.Subheader>
         {address ? (
-          <styled.div pb="space.03">
-            <AddressDisplayer address={address} />
+          <styled.div pb="space.03" data-testid={ConnectAccountSelectors.BtcAddAccountAddress}>
+            <AddressDisplayer
+              address={address}
+              data-testid={SharedComponentsSelectors.AddressDisplayer}
+            />
           </styled.div>
         ) : (
           <Callout variant="error" mt="space.03" mb="space.03">
-            Could not derive the address for this multisig account.
+            {timelocked
+              ? 'Could not derive this timelocked address.'
+              : 'Could not derive the address for this multisig account.'}
           </Callout>
         )}
       </Approver.Section>
+      {timelocked ? (
+        <Approver.Section>
+          <Approver.Subheader>Spending conditions</Approver.Subheader>
+          <styled.div pb="space.03">
+            <BondSpendingConditions {...timelocked} />
+          </styled.div>
+        </Approver.Section>
+      ) : null}
       <Approver.Section>
         <Approver.Subheader>With account</Approver.Subheader>
         <CurrentAccountDisplayer onSelectAccount={toggleSwitchAccount} />
         <Callout variant={callout.variant} mt="space.04" mb="space.03">
           {callout.message}
         </Callout>
+        {isLedgerUnsupported ? (
+          <Callout variant="warning" mb="space.03">
+            {ledgerRawKeyUnsupportedMessage}
+          </Callout>
+        ) : null}
       </Approver.Section>
-      <Approver.Section>
-        <Approver.Subheader>Account name</Approver.Subheader>
-        <styled.p textStyle="caption.01" pb="space.03">
-          {name}
-        </styled.p>
-      </Approver.Section>
+      {timelocked ? null : (
+        <Approver.Section>
+          <Approver.Subheader>Account name</Approver.Subheader>
+          <styled.p textStyle="caption.01" pb="space.03">
+            {name}
+          </styled.p>
+        </Approver.Section>
+      )}
       <Approver.Section>
         <Approver.Subheader>Bitcoin descriptor</Approver.Subheader>
         <styled.p textStyle="caption.01" wordBreak="break-all" pb="space.03">

@@ -1,8 +1,18 @@
+import { bytesToHex } from '@noble/hashes/utils';
+import { type HDKey } from '@scure/bip32';
+
+import { isDefined } from '@leather.io/utils';
+
 import { minTimestampLockTime } from './bond-lock-script';
 import {
+  type AccountDescriptorKey,
+  type CompiledWshDescriptor,
   compileWshDescriptor,
+  findAccountDescriptorKey,
   getWshDescriptorThreshold,
   isExtendedPublicKeyExpression,
+  maxDescriptorKeyExpressionLength,
+  parseMultisigArgs,
   stripDescriptorChecksum,
 } from './wsh-descriptor';
 
@@ -14,29 +24,60 @@ export const bondTemplateV1 = {
 } as const;
 
 const bondDescriptorPattern =
-  /^wsh\(and_v\(v:or_i\(after\((\d{1,10})\),and_v\(v:sha256\(([0-9a-fA-F]{64})\),pk\(([^()]+)\)\)\),((?:sorted)?multi\([^()]+\))\)\)$/;
+  /^wsh\(and_v\(v:or_i\(after\((\d{1,10})\),and_v\(v:sha256\(([0-9a-fA-F]{64})\),pk\(([^()]+)\)\)\),((?:sorted)?multi\([^()]+\)|pk\([^()]+\))\)\)$/;
+const vaultMultiPattern = /^(?:sorted)?multi\(([^()]+)\)$/;
+const vaultPkPattern = /^pk\(([^()]+)\)$/;
 
 const compressedPubkeyHexPattern = /^0[23][0-9a-f]{64}$/;
 const compressedPubkeyAnyCaseHexPattern = /^0[23][0-9a-fA-F]{64}$/;
+const bondExtendedKeyPathPattern =
+  /^(?:\[[0-9a-fA-F]{8}(?:\/\d{1,10}['h]?){0,8}\])?[1-9A-HJ-NP-Za-km-z]+\/0\/\d{1,10}$/;
 
-function isBondCounterpartyKeyExpression(keyExpression: string): boolean {
+function isBondExtendedKeyExpression(keyExpression: string): boolean {
   return (
-    compressedPubkeyHexPattern.test(keyExpression) || isExtendedPublicKeyExpression(keyExpression)
+    keyExpression.length <= maxDescriptorKeyExpressionLength &&
+    bondExtendedKeyPathPattern.test(keyExpression) &&
+    isExtendedPublicKeyExpression(keyExpression)
   );
 }
 
-function normalizeBondCounterpartyKey(keyExpression: string): string {
+function isBondKeyExpression(keyExpression: string): boolean {
+  return (
+    compressedPubkeyHexPattern.test(keyExpression) || isBondExtendedKeyExpression(keyExpression)
+  );
+}
+
+function normalizeBondKey(keyExpression: string): string {
   return compressedPubkeyAnyCaseHexPattern.test(keyExpression)
     ? keyExpression.toLowerCase()
     : keyExpression;
 }
 
-function isValidVaultMultiExpression(multiExpression: string): boolean {
-  const args = multiExpression.slice(multiExpression.indexOf('(') + 1, -1).split(',');
-  const [threshold, ...keyExpressions] = args;
-  if (!threshold || !/^\d+$/.test(threshold)) return false;
-  if (!keyExpressions.length) return false;
-  return keyExpressions.every(isExtendedPublicKeyExpression);
+export interface BondVaultLeaf {
+  kind: 'pk' | 'multi';
+  expression: string;
+  requiredSignatures: number;
+  keys: string[];
+}
+
+function parseVaultKeys(rawKeys: string[]): string[] | null {
+  const keys = rawKeys.map(normalizeBondKey);
+  return keys.every(isBondKeyExpression) ? keys : null;
+}
+
+function parseBondVaultLeaf(expression: string): BondVaultLeaf | null {
+  const pkKey = vaultPkPattern.exec(expression)?.[1];
+  if (pkKey) {
+    const keys = parseVaultKeys([pkKey]);
+    return keys ? { kind: 'pk', expression, requiredSignatures: 1, keys } : null;
+  }
+
+  const multiArgs = vaultMultiPattern.exec(expression)?.[1];
+  if (!multiArgs) return null;
+  const parsed = parseMultisigArgs(multiArgs);
+  if (!parsed) return null;
+  const keys = parseVaultKeys(parsed.keyExpressions);
+  return keys ? { kind: 'multi', expression, requiredSignatures: parsed.threshold, keys } : null;
 }
 
 export interface BondDescriptorParams {
@@ -49,7 +90,13 @@ export interface BondDescriptorMatch extends BondDescriptorParams {
   multiExpression: string;
 }
 
-export function matchBondDescriptor(descriptor: string): BondDescriptorMatch | null {
+export interface BondTemplateDescriptorMatch extends BondDescriptorParams {
+  vault: BondVaultLeaf;
+}
+
+export function matchBondTemplateDescriptor(
+  descriptor: string
+): BondTemplateDescriptorMatch | null {
   const compactDescriptor = stripDescriptorChecksum(descriptor).replace(/\s/g, '');
   const match = bondDescriptorPattern.exec(compactDescriptor);
   if (!match) return null;
@@ -57,11 +104,12 @@ export function matchBondDescriptor(descriptor: string): BondDescriptorMatch | n
   const rawUnlockHeight = match[1];
   const hash = match[2];
   const rawCounterpartyKey = match[3];
-  const multiExpression = match[4];
-  if (!rawUnlockHeight || !hash || !rawCounterpartyKey || !multiExpression) return null;
-  const counterpartyKey = normalizeBondCounterpartyKey(rawCounterpartyKey);
-  if (!isBondCounterpartyKeyExpression(counterpartyKey)) return null;
-  if (!isValidVaultMultiExpression(multiExpression)) return null;
+  const vaultExpression = match[4];
+  if (!rawUnlockHeight || !hash || !rawCounterpartyKey || !vaultExpression) return null;
+  const counterpartyKey = normalizeBondKey(rawCounterpartyKey);
+  if (!isBondKeyExpression(counterpartyKey)) return null;
+  const vault = parseBondVaultLeaf(vaultExpression);
+  if (!vault) return null;
 
   const unlockHeight = Number(rawUnlockHeight);
   if (!isValidUnlockHeight(unlockHeight)) return null;
@@ -70,8 +118,17 @@ export function matchBondDescriptor(descriptor: string): BondDescriptorMatch | n
     unlockHeight,
     hash: hash.toLowerCase(),
     counterpartyKey,
-    multiExpression,
+    vault,
   };
+}
+
+export function matchBondDescriptor(descriptor: string): BondDescriptorMatch | null {
+  const match = matchBondTemplateDescriptor(descriptor);
+  if (!match || match.vault.kind !== 'multi') return null;
+  if (!match.vault.keys.every(isExtendedPublicKeyExpression)) return null;
+
+  const { vault, ...params } = match;
+  return { ...params, multiExpression: vault.expression };
 }
 
 function isValidUnlockHeight(unlockHeight: number): boolean {
@@ -110,11 +167,14 @@ function fillBondTemplate({
   keyExpressions,
 }: FillBondTemplateArgs): string {
   const multiExpression = `sortedmulti(${threshold},${keyExpressions.join(',')})`;
-  return bondTemplateV1.script
+  const descriptor = bondTemplateV1.script
     .replace('<<param:unlock_height>>', String(unlockHeight))
     .replace('<<param:hash>>', hash)
     .replace('<<param:counterparty_key>>', counterpartyKeyExpression)
     .replace('<<vault:multi>>', multiExpression);
+  if (!matchBondTemplateDescriptor(descriptor))
+    throw new Error('Bond descriptor does not match the bond template');
+  return descriptor;
 }
 
 export interface InstantiateBondDescriptorArgs extends BondDescriptorParams {
@@ -130,7 +190,7 @@ export function instantiateBondDescriptor({
   keyExpressions,
 }: InstantiateBondDescriptorArgs): string {
   assertValidBondLockParams({ unlockHeight, hash });
-  if (!isBondCounterpartyKeyExpression(counterpartyKey))
+  if (!isBondKeyExpression(counterpartyKey))
     throw new Error(
       'Bond counterparty key must be an xpub or tpub key expression or a compressed public key'
     );
@@ -185,4 +245,29 @@ export function getBondVaultKeys(policyDescriptor: string): BondVaultKeys {
     threshold: getWshDescriptorThreshold(policyDescriptor),
     keyExpressions: keys.map(key => key.keyExpression),
   };
+}
+
+function getBondVaultPubkeyHexes(vault: BondVaultLeaf): Set<string> {
+  const { keys } = compileWshDescriptor(`wsh(${vault.expression})`);
+  return new Set(
+    keys
+      .map(key => key.pubkey)
+      .filter(isDefined)
+      .map(pubkey => bytesToHex(pubkey))
+  );
+}
+
+export function findPolicyMemberAccountKey(
+  descriptor: string,
+  compiled: CompiledWshDescriptor,
+  accountKeychain: HDKey
+): AccountDescriptorKey | undefined {
+  const bond = matchBondTemplateDescriptor(descriptor);
+  if (!bond) return findAccountDescriptorKey(compiled, accountKeychain);
+
+  const vaultPubkeyHexes = getBondVaultPubkeyHexes(bond.vault);
+  const vaultKeys = compiled.keys.filter(
+    key => !!key.pubkey && vaultPubkeyHexes.has(bytesToHex(key.pubkey))
+  );
+  return findAccountDescriptorKey({ ...compiled, keys: vaultKeys }, accountKeychain);
 }
