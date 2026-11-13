@@ -5,13 +5,20 @@ on:
   push:
     branches:
       - '**'
+  workflow_call:
+    inputs:
+      ref:
+        description: The branch to check instead of the one the caller runs on
+        type: string
+        required: false
+        default: ''
 
 # GITHUB_TOKEN only needs to read the repository for checkout.
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ inputs.ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -22,6 +29,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ inputs.ref }}
       - uses: $/.github/actions/provision
       - name: lint-prettier
         run: pnpm format:check
@@ -33,6 +41,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ inputs.ref }}
       - uses: $/.github/actions/provision
       - name: lint-packages-with-syncpack
         run: pnpm syncpack:lint
@@ -44,6 +53,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ inputs.ref }}
       - uses: $/.github/actions/provision
       - name: lint-eslint
         run: pnpm build && pnpm lint
@@ -55,6 +65,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ inputs.ref }}
       - uses: $/.github/actions/provision
       - name: run-typecheck-recursively-in-each-package
         run: pnpm build && pnpm typecheck
@@ -67,6 +78,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+          ref: ${{ inputs.ref }}
 
       - uses: $/.github/actions/provision
 
@@ -80,6 +92,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ inputs.ref }}
       - uses: $/.github/actions/provision
 
       - name: lint-dependency-rules
@@ -92,6 +105,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ inputs.ref }}
       - uses: $/.github/actions/provision
 
       - name: lint-dependency-rules
@@ -104,6 +118,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ inputs.ref }}
       - uses: $/.github/actions/provision
 
       - name: check-feature-map
@@ -116,6 +131,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ inputs.ref }}
       - uses: $/.github/actions/provision
 
       - run: pnpm build
@@ -130,6 +146,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ inputs.ref }}
       - uses: $/.github/actions/provision
 
       - run: pnpm build
@@ -145,6 +162,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+          ref: ${{ inputs.ref }}
 
       - uses: $/.github/actions/provision
 
@@ -166,6 +184,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          ref: ${{ inputs.ref }}
       - uses: $/.github/actions/provision
 
       - name: audit
