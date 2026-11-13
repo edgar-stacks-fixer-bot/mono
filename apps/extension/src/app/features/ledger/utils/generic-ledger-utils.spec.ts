@@ -1,4 +1,4 @@
-import { prepareLedgerDeviceForAppFn } from './generic-ledger-utils';
+import { ledgerAppNameForChain, prepareLedgerDeviceForAppFn } from './generic-ledger-utils';
 
 const noAccessibleDeviceError = {
   _tag: 'NoAccessibleDeviceError',
@@ -46,5 +46,20 @@ describe(prepareLedgerDeviceForAppFn.name, () => {
     await rejection;
     expect(onError).toHaveBeenCalledWith(noAccessibleDeviceError);
     expect(setLoadingState.mock.calls).toEqual([[true], [false]]);
+  });
+});
+
+describe(ledgerAppNameForChain.name, () => {
+  test.each([
+    { chain: 'bitcoin', network: 'mainnet', appName: 'Bitcoin' },
+    { chain: 'bitcoin', network: 'testnet', appName: 'Bitcoin Test' },
+    { chain: 'bitcoin', network: 'signet', appName: 'Bitcoin Test' },
+    { chain: 'bitcoin', network: 'regtest', appName: 'Bitcoin Test' },
+    { chain: 'stacks', network: 'mainnet', appName: 'Stacks' },
+    { chain: 'stacks', network: 'testnet', appName: 'Stacks' },
+    { chain: 'stacks', network: 'signet', appName: 'Stacks' },
+    { chain: 'stacks', network: 'regtest', appName: 'Stacks' },
+  ] as const)('names the $appName app for $chain on $network', ({ chain, network, appName }) => {
+    expect(ledgerAppNameForChain(chain, network)).toBe(appName);
   });
 });
