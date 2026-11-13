@@ -1,4 +1,4 @@
-import { btcAddAccount } from './btc-add-account';
+import { btcAddAccount, maxBtcDescriptorLength } from './btc-add-account';
 
 describe('btcAddAccount', () => {
   const validParams = {
@@ -19,6 +19,24 @@ describe('btcAddAccount', () => {
 
   test('rejects a missing descriptor', () => {
     expect(btcAddAccount.params.safeParse({ name: 'Treasury vault' }).success).toEqual(false);
+  });
+
+  test('accepts a descriptor at the maximum length', () => {
+    expect(
+      btcAddAccount.params.safeParse({
+        ...validParams,
+        descriptor: 'a'.repeat(maxBtcDescriptorLength),
+      }).success
+    ).toEqual(true);
+  });
+
+  test('rejects a descriptor over the maximum length', () => {
+    expect(
+      btcAddAccount.params.safeParse({
+        ...validParams,
+        descriptor: 'a'.repeat(maxBtcDescriptorLength + 1),
+      }).success
+    ).toEqual(false);
   });
 
   test('rejects a missing name', () => {

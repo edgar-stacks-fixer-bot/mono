@@ -5,6 +5,7 @@ import { HDKey } from '@scure/bip32';
 import { of } from 'rxjs';
 
 import { fakeSignerAction, makeFakeLedgerBitcoinApp } from '../utils/ledger-app.mocks';
+import { ledgerRawKeyUnsupportedMessage } from '../utils/ledger-descriptor-address';
 import { useDisplayLedgerDescriptorAddress } from './use-display-ledger-descriptor-address';
 
 const mocks = vi.hoisted(() => ({
@@ -122,7 +123,19 @@ describe(useDisplayLedgerDescriptorAddress.name, () => {
     const displayAddress = useDisplayLedgerDescriptorAddress();
 
     await expect(displayAddress(makeFakeLedgerApp(), rawKeyDescriptor)).rejects.toThrow(
-      'another signer is a raw public key'
+      ledgerRawKeyUnsupportedMessage
+    );
+    expect(mocks.registerWallet).not.toHaveBeenCalled();
+  });
+
+  test('rejects a bond where the account only holds the counterparty key', async () => {
+    const vaultXpub = makeNativeSegwitAccountKeychain(2).publicExtendedKey;
+    const hash = 'ab'.repeat(32);
+    const bondDescriptor = `wsh(and_v(v:or_i(after(1000),and_v(v:sha256(${hash}),pk(${accountKeychain.publicExtendedKey}/0/0))),pk(${vaultXpub}/0/0)))`;
+    const displayAddress = useDisplayLedgerDescriptorAddress();
+
+    await expect(displayAddress(makeFakeLedgerApp(), bondDescriptor)).rejects.toThrow(
+      'Current account is not part of this descriptor'
     );
     expect(mocks.registerWallet).not.toHaveBeenCalled();
   });
