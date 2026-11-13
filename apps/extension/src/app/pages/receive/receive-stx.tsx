@@ -20,7 +20,7 @@ export function ReceiveStxModal({ onClose }: ReceiveStxModalProps) {
 
   async function copyAddress(address: string) {
     await copyToClipboard(address);
-    toast.success('Copied to clipboard!');
+    toast.success('Address copied to clipboard');
   }
   const currentAccount = useCurrentStacksAccount();
   const policy = useCurrentPolicy();
