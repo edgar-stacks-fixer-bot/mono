@@ -1,3 +1,5 @@
+import { type ReactNode } from 'react';
+
 import BigNumber from 'bignumber.js';
 import { Box } from 'leather-styles/jsx';
 import { CopyAddress } from '~/components/copy-address';
@@ -16,12 +18,38 @@ import { toHumanReadableMicroStx } from '~/utils/unit-convert';
 import { PoolTvlValue } from '../../components/pool-tvl-value';
 import { type Pox5StakerInfo } from '../../queries/create-get-pox5-staker-info-query-options';
 import {
+  type PoolPayoutMode,
   getPoolPayoutMode,
   getRewardsTokenSymbol,
   isBtcPayoutRequired,
 } from '../../utils/pool-payout';
 import { type ActiveStakingDetails } from '../hooks/use-active-staking-info';
 import { StakingActionButtons } from './staking-action-buttons';
+
+interface RewardsCells {
+  token: string;
+  payout: ReactNode;
+}
+
+function getRewardsCells(
+  payoutMode: PoolPayoutMode,
+  { payoutPreference, payoutPreferenceStatus }: ActiveStakingDetails
+): RewardsCells {
+  const btcPayoutRequired = isBtcPayoutRequired(payoutMode);
+  if (payoutPreferenceStatus !== 'success') {
+    return { token: btcPayoutRequired ? 'BTC' : EM_DASH, payout: EM_DASH };
+  }
+  if (payoutPreference) {
+    return {
+      token: 'BTC',
+      payout: <CopyAddress addr={payoutPreference.btcRewardAddress} emphasis underlined wide />,
+    };
+  }
+  return {
+    token: getRewardsTokenSymbol(payoutMode),
+    payout: btcPayoutRequired ? EM_DASH : 'sBTC on Stacks',
+  };
+}
 
 interface StakingPositionGridProps {
   poolSlug: StakingPoolSlug;
@@ -41,7 +69,7 @@ export function StakingPositionGrid({ poolSlug, pool, info, details }: StakingPo
     ? poolSignerManagerContractIds
     : [info.signerManagerContractId];
   const payoutMode = getPoolPayoutMode(pool);
-  const defaultPayoutLabel = isBtcPayoutRequired(payoutMode) ? EM_DASH : 'sBTC on Stacks';
+  const rewardsCells = getRewardsCells(payoutMode, details);
 
   return (
     <StackingInfoGridLayout
@@ -123,11 +151,7 @@ export function StakingPositionGrid({ poolSlug, pool, info, details }: StakingPo
           />
         ),
         rewardsToken: (
-          <ValueDisplayer
-            gap="space.04"
-            name="Rewards token"
-            value={getRewardsTokenSymbol(payoutMode)}
-          />
+          <ValueDisplayer gap="space.04" name="Rewards token" value={rewardsCells.token} />
         ),
         poolAddress: (
           <ValueDisplayer
@@ -137,22 +161,7 @@ export function StakingPositionGrid({ poolSlug, pool, info, details }: StakingPo
           />
         ),
         rewardAddress: (
-          <ValueDisplayer
-            gap="space.04"
-            name="Rewards payout"
-            value={
-              details.payoutPreference ? (
-                <CopyAddress
-                  addr={details.payoutPreference.btcRewardAddress}
-                  emphasis
-                  underlined
-                  wide
-                />
-              ) : (
-                defaultPayoutLabel
-              )
-            }
-          />
+          <ValueDisplayer gap="space.04" name="Rewards payout" value={rewardsCells.payout} />
         ),
         tvl: (
           <ValueDisplayer
