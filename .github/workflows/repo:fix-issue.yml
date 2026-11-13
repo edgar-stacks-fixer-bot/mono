@@ -13,18 +13,22 @@ on:
         type: string
         required: false
         default: ''
+      stub:
+        description: 'Experiment only: skip the fixer and hand over a one-line stub fix'
+        type: boolean
+        default: false
 
 # GITHUB_TOKEN default permissions disabled; jobs declare their own.
 permissions: {}
 
 concurrency:
-  group: fix-issue-${{ inputs.issue }}
+  group: fix-issue-${{ github.ref_name }}-${{ inputs.issue }}
   cancel-in-progress: true
 
 jobs:
   fix-issue:
     name: fix-issue
-    if: github.ref_name == 'dev'
+    if: (github.ref_name == 'dev' || startsWith(github.ref_name, 'exp/')) && !inputs.stub
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     cache-mode: none
@@ -156,17 +160,58 @@ jobs:
           if-no-files-found: error
           retention-days: 3
 
+  stub-fix:
+    name: stub-fix
+    if: startsWith(github.ref_name, 'exp/') && inputs.stub
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    cache-mode: none
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: write-stub-fix
+        run: |
+          mkdir -p tmp/fix-issue
+          printf '\nStub fix from run %s.\n' "$GITHUB_RUN_ID" >> apps/extension/README.md
+          jq -n '{
+            state: "done",
+            commit: "docs(extension): add a stub line to the readme",
+            why: ["Experiment run with the fixer stubbed out."],
+            how: ["Appended one line to the extension readme."],
+            tested: ["Not verified: stub fix, nothing to test."]
+          }' > tmp/fix-issue/status.json
+          git add -A
+          git diff --cached --binary --no-renames HEAD > tmp/fix-issue/fix.patch
+
+      - name: upload-fix
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: fix-issue
+          path: |
+            tmp/fix-issue/status.json
+            tmp/fix-issue/fix.patch
+          if-no-files-found: error
+          retention-days: 3
+
   open-pull-request:
     name: open-pull-request
-    needs: fix-issue
-    if: github.ref_name == 'dev'
+    needs: [fix-issue, stub-fix]
+    if: >-
+      always() && (github.ref_name == 'dev' || startsWith(github.ref_name, 'exp/')) &&
+      (needs.fix-issue.result == 'success' || needs.stub-fix.result == 'success')
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     cache-mode: none
-    environment: environment/mono-fix-issue
     permissions:
-      contents: read # checkout only; every GitHub write uses the fix-issue app token
-      id-token: write # OIDC exchange for the AWS role that signs the fix-issue App JWT with its KMS key
+      contents: write
+      pull-requests: write
+      issues: write
+    outputs:
+      pushed: ${{ steps.branch.outputs.pushed }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -180,19 +225,6 @@ jobs:
       - name: build-tools
         run: pnpm --filter @leather.io/tools build
 
-      - name: aws-credentials
-        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
-        with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}
-
-      - name: app-token
-        id: app-token
-        env:
-          APP_CLIENT_ID: ${{ vars.FIX_ISSUE_APP_CLIENT_ID }}
-          KMS_KEY_ID: ${{ vars.FIX_ISSUE_APP_KMS_KEY_ID }}
-        run: pnpm lt fix-issue app-token create --client-id "$APP_CLIENT_ID" --kms-key-id "$KMS_KEY_ID"
-
       - name: download-fix
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
@@ -201,17 +233,24 @@ jobs:
 
       - name: open-pull-request
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ github.token }}
           ISSUE: ${{ inputs.issue }}
           BRANCH: bot/fix-issue-${{ inputs.issue }}-${{ github.run_id }}
+          BASE: ${{ github.ref_name }}
           PARENT_SHA: ${{ github.sha }}
           CO_AUTHOR: ${{ github.triggering_actor }}
         run: >-
-          pnpm lt fix-issue open-pull-request --issue "$ISSUE" --branch "$BRANCH" --base dev
+          pnpm lt fix-issue open-pull-request --issue "$ISSUE" --branch "$BRANCH" --base "$BASE"
           --parent-sha "$PARENT_SHA" --co-author "$CO_AUTHOR"
 
-      - name: revoke-app-token
-        if: always() && steps.app-token.outputs.token != ''
+      - name: check-branch
+        id: branch
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: pnpm lt fix-issue app-token revoke
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: bot/fix-issue-${{ inputs.issue }}-${{ github.run_id }}
+        run: |
+          if gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$BRANCH" --silent; then
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+          fi
