@@ -33,6 +33,9 @@ export class SendPage {
   readonly feeToBePaid: Locator;
   readonly infoCardButton: Locator;
   readonly broadcastErrorTitle: Locator;
+  readonly sponsoredFeeBadge: Locator;
+  readonly sbtcFeeRequoteCallout: Locator;
+  readonly feeEstimateSelect: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -71,6 +74,9 @@ export class SendPage {
     this.feeToBePaid = page.getByTestId(SharedComponentsSelectors.FeeToBePaidLabel);
     this.infoCardButton = page.getByTestId(SharedComponentsSelectors.InfoCardButton);
     this.broadcastErrorTitle = page.getByTestId(SharedComponentsSelectors.BroadcastErrorTitle);
+    this.sponsoredFeeBadge = page.getByTestId(SharedComponentsSelectors.SponsoredFeeBadge);
+    this.sbtcFeeRequoteCallout = page.getByTestId(SendCryptoAssetSelectors.SbtcFeeRequoteCallout);
+    this.feeEstimateSelect = page.getByTestId(SharedComponentsSelectors.FeeEstimateSelect);
   }
 
   async selectBtcAndGoToSendForm(expectedAvailableBalance = loadedAvailableBalance) {
@@ -103,7 +109,9 @@ export class SendPage {
 
   async selectSip10AndGoToSendForm(tokenTestId: string = MockedTokensSelectors.Sip10TokenTestId) {
     await this.page.waitForURL('**' + RouteUrls.SendCryptoAsset);
-    await this.page.getByTestId(tokenTestId).click();
+    const chooseAssetPage = this.page.getByTestId(SendCryptoAssetSelectors.ChooseAssetToSendPage);
+    await expect(chooseAssetPage).toBeVisible();
+    await chooseAssetPage.getByTestId(tokenTestId).click();
     await this.page.getByTestId(SendCryptoAssetSelectors.SendForm).waitFor();
     await this.waitForFeeEstimate();
   }
@@ -139,6 +147,21 @@ export class SendPage {
 
   async waitForFeeRow() {
     await this.page.getByTestId(SharedComponentsSelectors.FeeRow).waitFor({ state: 'attached' });
+  }
+
+  async openFeeEstimateSelect() {
+    await this.page
+      .getByTestId(SharedComponentsSelectors.FeeRow)
+      .getByTestId(SharedComponentsSelectors.MiddleFeeEstimateItem)
+      .first()
+      .click();
+    await expect(this.feeEstimateSelect).toBeVisible();
+  }
+
+  async selectHighFeeEstimate() {
+    await this.openFeeEstimateSelect();
+    await this.feeEstimateSelect.getByTestId(SharedComponentsSelectors.HighFeeEstimateItem).click();
+    await expect(this.feeEstimateSelect).toBeHidden();
   }
 
   async previewBitcoinTransaction() {

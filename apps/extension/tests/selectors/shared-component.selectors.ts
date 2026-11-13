@@ -24,6 +24,8 @@ export const SharedComponentsSelectors = {
   FeesListItemFeeValue: 'fee-list-item-fee-value',
   FeeTabRecommended: 'tab-recommended',
   FeeTabCustom: 'tab-custom',
+  HighFeeEstimateItem: 'high-fee',
+  SponsoredFeeBadge: 'sponsored-fee-badge',
 
   // Error
   BroadcastErrorTitle: 'broadcast-error-title',

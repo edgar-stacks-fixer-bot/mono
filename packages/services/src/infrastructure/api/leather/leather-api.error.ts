@@ -1,9 +1,17 @@
+import { z } from 'zod';
+
+export interface LeatherApiErrorData {
+  error: string;
+  code?: string;
+  reason?: string;
+}
+
 export class LeatherApiError extends Error {
   constructor(
     public readonly url: string,
     public readonly status: number,
     public readonly statusText: string,
-    public readonly data?: { error: string }
+    public readonly data?: LeatherApiErrorData
   ) {
     const baseMessage = `Leather API (${url}): ${status} ${statusText}`;
     super(data?.error ? `${baseMessage} — ${data.error}` : baseMessage);
@@ -31,18 +39,30 @@ export function getErrorDetail(error: unknown): string | undefined {
   return undefined;
 }
 
+const leatherApiErrorBodySchema = z.object({
+  error: z.string().optional(),
+  code: z.string().optional(),
+  reason: z.string().optional(),
+});
+
 export async function readLeatherApiErrorData(
   response: Response
-): Promise<{ error: string } | undefined> {
+): Promise<LeatherApiErrorData | undefined> {
   try {
     const body: unknown = await response.clone().json();
-    if (body && typeof body === 'object' && 'error' in body && typeof body.error === 'string') {
-      return { error: body.error };
-    }
+    const result = leatherApiErrorBodySchema.safeParse(body);
+    if (!result.success) return undefined;
+    const { error, code, reason } = result.data;
+    const message = error ?? code;
+    if (message === undefined) return undefined;
+    return {
+      error: message,
+      ...(code ? { code } : {}),
+      ...(reason ? { reason } : {}),
+    };
   } catch {
     return undefined;
   }
-  return undefined;
 }
 
 export function assertLeatherApiData<T>(data: T | undefined): T {

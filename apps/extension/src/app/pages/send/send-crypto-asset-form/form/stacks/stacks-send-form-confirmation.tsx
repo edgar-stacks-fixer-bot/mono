@@ -27,9 +27,16 @@ import { useCryptoCurrencyMarketData } from '@app/query/common/market-data/marke
 import type { ProposalSentSummaryState } from '../../../sent-summary/proposal-sent-summary';
 import { stacksConfirmationRouteStateSchema } from '../../hooks/use-send-form-navigate';
 import { SendFormConfirmationLayout } from '../send-form-confirmation.layout';
+import { SbtcSponsoredSendFormConfirmation } from './sbtc-sponsored-send-form-confirmation';
 import { useProposeStacksSendTransaction } from './use-propose-stacks-send-transaction';
 
 export function StacksSendFormConfirmation() {
+  const { sponsorship } = useRouteState(stacksConfirmationRouteStateSchema);
+  if (sponsorship) return <SbtcSponsoredSendFormConfirmation />;
+  return <StacksStandardSendFormConfirmation />;
+}
+
+function StacksStandardSendFormConfirmation() {
   const {
     tx: txHex,
     decimals,

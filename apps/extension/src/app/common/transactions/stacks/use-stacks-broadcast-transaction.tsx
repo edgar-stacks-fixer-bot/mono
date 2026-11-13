@@ -14,6 +14,10 @@ import {
   StacksTransactionActionType,
   stacksTransactionToHex,
 } from '@app/common/transactions/stacks/transaction.utils';
+import {
+  isSponsoredTransaction,
+  sponsoredTransactionBroadcastError,
+} from '@app/features/sbtc-sponsorship/sbtc-sponsorship.utils';
 import { toastDurations, useToast } from '@app/features/toasts/use-toast';
 import { useSignStacksTransaction } from '@app/store/transactions/transaction.hooks';
 import { LoadingKeys } from '@app/store/ui/ui.hooks';
@@ -64,6 +68,12 @@ export function useStacksBroadcastTransaction({
         logger.error('Cannot broadcast transaction, no tx in state');
         toast.error('Unable to broadcast transaction');
         return;
+      }
+      if (isSponsoredTransaction(signedTx)) {
+        logger.error('Refused to broadcast a sponsored transaction');
+        return navigate(RouteUrls.BroadcastError, {
+          state: { message: sponsoredTransactionBroadcastError },
+        });
       }
       try {
         setIsBroadcasting(true);
