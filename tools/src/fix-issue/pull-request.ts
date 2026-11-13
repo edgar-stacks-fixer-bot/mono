@@ -248,12 +248,15 @@ async function commitTree(
   const baseTree = base
     ? commitSchema.parse(await client.request('GET', `repos/${repo}/git/commits/${base}`)).tree.sha
     : undefined;
-  const tree = shaSchema.parse(
-    await client.request('POST', `repos/${repo}/git/trees`, {
-      ...(baseTree ? { base_tree: baseTree } : {}),
-      tree: entries,
-    })
-  );
+  const tree =
+    baseTree && entries.length === 0
+      ? { sha: baseTree }
+      : shaSchema.parse(
+          await client.request('POST', `repos/${repo}/git/trees`, {
+            ...(baseTree ? { base_tree: baseTree } : {}),
+            tree: entries,
+          })
+        );
   const commit = shaSchema.parse(
     await client.request('POST', `repos/${repo}/git/commits`, {
       message,

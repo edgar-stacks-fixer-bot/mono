@@ -219,8 +219,11 @@ function evaluate(
       details: `Only ${allowedPathsDescription} may change:\n${refused.join('\n')}`,
     };
   }
+  const untouchedMerge =
+    revise?.merged === true && filesWithConflictMarkers(root, revise.conflicts).length === 0;
   if (
     changes.length === 0 &&
+    !untouchedMerge &&
     (status.status.state === 'blocked' || status.status.handoff.length > 0)
   ) {
     return {

@@ -232,6 +232,29 @@ describe('verifyFix', () => {
       expect(pnpm.calls).toHaveLength(gate.length);
     });
 
+    test('runs the gate on a merge even when the fixer stopped as blocked without changing it', () => {
+      repo = createTestRepo();
+      repo.writeStatus({ ...answered, state: 'blocked', questions: ['Which range?'] });
+      const pnpm = fakePnpm(repo);
+      expect(verifyRevise(pnpm, { ...revise, merged: true })).toMatchObject({ passed: true });
+      expect(pnpm.calls).toHaveLength(gate.length);
+    });
+
+    test('skips the gate for a blocked fixer that left the conflict markers of a merge', () => {
+      repo = createTestRepo();
+      repo.write(
+        'apps/extension/fee-row.tsx',
+        '<<<<<<< HEAD\nours\n=======\ntheirs\n>>>>>>> dev\n'
+      );
+      repo.git(['commit', '-q', '-a', '-m', 'merge baseline']);
+      repo.writeStatus({ ...answered, state: 'blocked', questions: ['Which side wins?'] });
+      const pnpm = fakePnpm(repo);
+      expect(
+        verifyRevise(pnpm, { ...revise, merged: true, conflicts: ['apps/extension/fee-row.tsx'] })
+      ).toMatchObject({ passed: true, skipped: true });
+      expect(pnpm.calls).toEqual([]);
+    });
+
     test('fails a finished revise while a conflict marker remains', () => {
       repo = createTestRepo();
       repo.write(
