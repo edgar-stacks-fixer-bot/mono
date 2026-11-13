@@ -23,7 +23,7 @@ export function ReceiveBtcModal({ type = 'btc', onClose }: ReceiveBtcModalProps)
 
   async function copyAddress(address: string) {
     await copyToClipboard(address);
-    toast.success('Copied to clipboard!');
+    toast.success('Address copied to clipboard');
   }
 
   const currentAccount = useCurrentAccountId();
