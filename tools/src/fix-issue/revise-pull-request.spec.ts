@@ -325,6 +325,24 @@ describe('openPullRequest for a revise', () => {
     expect(summaryOf(client)).toContain('- Merge of `dev`: Kept the wrap on top of dev.');
   });
 
+  test('commits a merge that leaves nothing but dev, without asking for an empty tree', async () => {
+    const { client, result } = revise({
+      conflict: true,
+      merged: true,
+      status: mergeStatus,
+      change() {
+        repo.write(conflictingFile, 'export const feeRow = 3;\n');
+      },
+    });
+    await result;
+    expect(callsTo(client, 'POST', '/git/trees')).toEqual([]);
+    expect(callsTo(client, 'POST', '/git/commits')[0]?.body).toMatchObject({
+      tree: `tree-of-${dev}`,
+      parents: [head, dev],
+    });
+    expect(callsTo(client, 'PATCH', `/git/refs/heads/${pullRequestBranch}`)).toHaveLength(1);
+  });
+
   test('commits a requested clean merge from blobs GitHub already has', async () => {
     const { client, result } = revise({ merged: true, mergeRequested: true, status: mergeStatus });
     await result;

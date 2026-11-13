@@ -10,9 +10,9 @@ Leather is the most popular and trusted wallet for apps built on Bitcoin. Connec
 
 [📩 Join the mailing list for updates →](https://forms.gle/sdZPu2jbX1AeQ8Fi9)
 
-### Contributing
+### Contributing to Leather
 
-Please see our [contribution guide](../../.github/CONTRIBUTING.md)
+Please read our [contributor guide](../../.github/CONTRIBUTING.md) before you open a pull request.
 
 ## Development
 
