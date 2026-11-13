@@ -210,6 +210,7 @@ jobs:
       contents: write
       pull-requests: write
       issues: write
+      actions: write
     outputs:
       pushed: ${{ steps.branch.outputs.pushed }}
     steps:
@@ -254,3 +255,13 @@ jobs:
           else
             echo "pushed=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: dispatch-checks
+        if: steps.branch.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BRANCH: bot/fix-issue-${{ inputs.issue }}-${{ github.run_id }}
+        run: |
+          gh workflow run repo:code-checks.yml --ref "$BRANCH"
+          gh workflow run repo:all-checks-pass.yml --ref "$BRANCH"
