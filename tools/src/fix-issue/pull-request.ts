@@ -21,6 +21,7 @@ interface OpenPullRequestOptions {
   readonly runAttempt?: string;
   readonly serverUrl?: string;
   readonly coAuthor?: string;
+  readonly alwaysDraft?: boolean;
   log?(line: string): void;
 }
 
@@ -441,7 +442,10 @@ export async function openPullRequest(options: OpenPullRequestOptions): Promise<
       });
     }
 
-    const draft = status.status.state === 'blocked' || status.status.handoff.length > 0;
+    const draft =
+      options.alwaysDraft === true ||
+      status.status.state === 'blocked' ||
+      status.status.handoff.length > 0;
     if (!existing) {
       const created = createdPullSchema.parse(
         await client.request('POST', `repos/${repo}/pulls`, {

@@ -241,7 +241,7 @@ jobs:
           CO_AUTHOR: ${{ github.triggering_actor }}
         run: >-
           pnpm lt fix-issue open-pull-request --issue "$ISSUE" --branch "$BRANCH" --base "$BASE"
-          --parent-sha "$PARENT_SHA" --co-author "$CO_AUTHOR"
+          --parent-sha "$PARENT_SHA" --co-author "$CO_AUTHOR" --always-draft
 
       - name: check-branch
         id: branch

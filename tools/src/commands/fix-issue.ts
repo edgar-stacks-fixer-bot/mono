@@ -40,6 +40,7 @@ interface OpenPullRequestFlags {
   readonly base: string;
   readonly parentSha: string;
   readonly coAuthor?: string;
+  readonly alwaysDraft?: boolean;
 }
 
 interface AppTokenFlags {
@@ -300,7 +301,8 @@ export function registerFixIssueCommands(program: Command): void {
     .requiredOption('--base <branch>', 'Base branch')
     .requiredOption('--parent-sha <sha>', 'Commit the patch was made against')
     .option('--co-author <login>', 'GitHub login to credit with a Co-authored-by trailer')
-    .action(({ issue, branch, base, parentSha, coAuthor }: OpenPullRequestFlags) =>
+    .option('--always-draft', 'Open the pull request as a draft whatever the fixer reports')
+    .action(({ issue, branch, base, parentSha, coAuthor, alwaysDraft }: OpenPullRequestFlags) =>
       guard('open-pull-request', async () => {
         const url = await openPullRequest({
           client: github(),
@@ -311,6 +313,7 @@ export function registerFixIssueCommands(program: Command): void {
           baseBranch: base,
           parentSha,
           coAuthor,
+          alwaysDraft,
           runId: process.env.GITHUB_RUN_ID,
           runAttempt: process.env.GITHUB_RUN_ATTEMPT,
           serverUrl: process.env.GITHUB_SERVER_URL,
