@@ -1,4 +1,4 @@
-import { Links, Meta, Scripts, ScrollRestoration, useLocation } from 'react-router';
+import { Links, Meta, Scripts, ScrollRestoration, useLocation, useMatches } from 'react-router';
 
 import { css } from 'leather-styles/css';
 import { Box, Flex, styled } from 'leather-styles/jsx';
@@ -13,6 +13,7 @@ import { defaultMetaTags } from './constants/meta-tags';
 import { InstallDialog } from './features/install-dialog/install-dialog';
 import { MockLeatherDialog } from './features/mock-dialog/mock-dialog';
 import { ToastsProvider } from './features/toasts/toasts-provider';
+import { hidesChrome } from './layouts/chrome';
 import { Footer } from './layouts/footer/footer';
 import { GlobalLoader } from './layouts/nav/global-loader';
 import { Nav } from './layouts/nav/nav';
@@ -42,7 +43,9 @@ const maxWidthCss = css({
 
 export function Layout({ children }: HasChildren) {
   const location = useLocation();
-  const bareCanvas = isBareCanvasPath(location.pathname);
+  const matches = useMatches();
+  const bareCanvas =
+    isBareCanvasPath(location.pathname) || matches.some(match => hidesChrome(match.handle));
 
   return (
     <html lang="en">

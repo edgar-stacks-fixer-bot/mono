@@ -3,9 +3,22 @@ import { type RouteConfig, index, route } from '@react-router/dev/routes';
 import { bitcoinStakingRoutes } from './pages/bitcoin-staking/bitcoin-staking.routes';
 import { multisigRoutes } from './pages/multisig/multisig.routes';
 import { playgroundRoutes } from './pages/playground/playground.routes';
+import { legacyPathRedirects } from './pages/redirects/legacy-path-redirects';
+
+const legacyPathRedirectRoutes = legacyPathRedirects.map(({ path }) =>
+  route(path.slice(1), 'pages/redirects/legacy-path-redirect.route.tsx', {
+    id: `legacy-path-redirect${path}`,
+  })
+);
 
 export default [
-  index('pages/index.route.tsx'),
+  index('pages/home/home.route.tsx'),
+  route('apps', 'pages/apps/apps.route.tsx'),
+  route('developers', 'pages/developers/developers.route.tsx'),
+  route('news', 'pages/news/news.route.tsx'),
+  route('explorer', 'pages/explorer/explorer.route.tsx'),
+  route('robots.txt', 'pages/seo/robots.route.tsx'),
+  route('sitemap.xml', 'pages/seo/sitemap.route.tsx'),
   // sBTC
   route('sbtc', 'pages/sbtc/sbtc.route.tsx'),
   // Changelog
@@ -15,6 +28,7 @@ export default [
   route('portfolio', 'pages/portfolio/portfolio.route.tsx'),
   // A fallback to legacy post routes
   route('posts/:postSlug', 'pages/posts/post.route.tsx'),
+  route('posts', 'pages/posts/posts-index.route.tsx'),
   route('support', 'pages/support/help-center.route.tsx'),
   route('support/search', 'pages/support/search.tsx'),
   route('support/guide/:slug', 'pages/redirects/support-guide-redirect.route.tsx'),
@@ -22,6 +36,8 @@ export default [
   // Redirects from old help-center URLs
   route('help-center', 'pages/redirects/help-center-redirect.route.tsx'),
   route('help-center/*', 'pages/redirects/help-center-wildcard.route.tsx'),
+  route('guides/*', 'pages/redirects/guides-wildcard.route.tsx'),
+  ...legacyPathRedirectRoutes,
   // Redirects from the retired stacking URLs, now served under /staking
   route('stacking', 'pages/redirects/stacking-redirect.route.tsx'),
   route('stacking/*', 'pages/redirects/stacking-wildcard.route.tsx'),

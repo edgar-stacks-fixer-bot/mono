@@ -1,42 +1,66 @@
-import { expect, test } from '@playwright/test';
+import { type APIRequestContext, expect, test } from '@playwright/test';
 
 const permanentRedirectStatus = 301;
+const okStatus = 200;
+const notFoundStatus = 404;
 
-const preservedPaths = [
-  { from: '/help-center/getting-started', to: '/support/getting-started' },
-  { from: '/help-center/guide/test-guide', to: '/support/guide/test-guide' },
+const oneHopRedirects = [
+  { from: '/help-center/guide/install-leather', to: '/support/install-leather' },
+  { from: '/help-center/install-leather', to: '/support/install-leather' },
   {
-    from: '/help-center/guide/another?query=value',
-    to: '/support/guide/another?query=value',
+    from: '/help-center/guide/what-is-stacks?query=value',
+    to: '/posts/what-is-stacks?query=value',
   },
+  { from: '/help-center/search?q=fees', to: '/support/search?q=fees' },
+  { from: '/help-center', to: '/support' },
+  { from: '/help-center/', to: '/support' },
+  { from: '/guides/send-stacks-from-app', to: '/support/send-stx' },
+  { from: '/support/guide/install-leather', to: '/support/install-leather' },
+  { from: '/support/guide/what-is-stacks', to: '/posts/what-is-stacks' },
+  { from: '/support/what-is-stacks', to: '/posts/what-is-stacks' },
+  { from: '/posts/install-leather', to: '/support/install-leather' },
+  {
+    from: '/posts/send-ordinals',
+    to: '/posts/deprecation-of-ordinals-inscriptions-support-in-leather',
+  },
+  { from: '/posts/apps-xlink', to: '/posts/brotocol' },
 ];
 
-test.describe('Help Center to Support Redirects', () => {
-  test('redirects /help-center to /support with 301 status', async ({ page }) => {
-    const response = await page.goto('/help-center');
+const notFoundPaths = [
+  '/posts/no-such-post',
+  '/support/no-such-guide',
+  '/support/guide/no-such-guide',
+  '/help-center/a/b',
+];
 
-    expect(response?.status()).toBe(200);
-    expect(page.url()).toContain('/support');
-    expect(page.url()).not.toContain('/help-center');
-  });
+async function getWithoutRedirects(request: APIRequestContext, path: string) {
+  return request.get(path, { maxRedirects: 0 });
+}
 
-  for (const { from, to } of preservedPaths) {
-    test(`redirects ${from} to ${to} preserving path`, async ({ request }) => {
-      const response = await request.get(from, { maxRedirects: 0 });
+function toPathWithSearch(location: string) {
+  const url = new URL(location, 'http://localhost');
+  return `${url.pathname}${url.search}`;
+}
+
+test.describe('Content redirects', () => {
+  for (const { from, to } of oneHopRedirects) {
+    test(`redirects ${from} to ${to} in one hop`, async ({ request }) => {
+      const response = await getWithoutRedirects(request, from);
       const location = response.headers()['location'] ?? '';
 
       expect(response.status()).toBe(permanentRedirectStatus);
-      expect(location).toContain(to);
-      expect(location).not.toContain('/help-center');
+      expect(toPathWithSearch(location)).toBe(to);
+
+      const target = await getWithoutRedirects(request, to);
+      expect(target.status()).toBe(okStatus);
     });
   }
 
-  test('redirects /support/guide/:slug to /support/:slug', async ({ request }) => {
-    const response = await request.get('/support/guide/test-guide', { maxRedirects: 0 });
-    const location = response.headers()['location'] ?? '';
+  for (const path of notFoundPaths) {
+    test(`returns 404 for ${path}`, async ({ request }) => {
+      const response = await getWithoutRedirects(request, path);
 
-    expect(response.status()).toBe(permanentRedirectStatus);
-    expect(location).toContain('/support/test-guide');
-    expect(location).not.toContain('/support/guide/');
-  });
+      expect(response.status()).toBe(notFoundStatus);
+    });
+  }
 });
