@@ -1,6 +1,15 @@
+import { ContentErrorBoundary } from '~/pages/error/content-error-boundary';
+import { notFoundMeta } from '~/pages/seo/marketing-meta';
+
 import { type Route } from './+types/help-center-redirect.route';
-import { helpCenterRedirectLoader } from './shared-redirect-logic';
+import { throwTerminalResolution } from './content-responses';
 
 export function loader({ request }: Route.LoaderArgs) {
-  return helpCenterRedirectLoader(request);
+  return throwTerminalResolution(request, { kind: 'redirect', path: '/support' });
+}
+
+export const meta = notFoundMeta;
+
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+  return <ContentErrorBoundary error={error} />;
 }

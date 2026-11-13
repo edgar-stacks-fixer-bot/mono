@@ -5,9 +5,26 @@ import type { StacksNetworkName } from '@stacks/network';
 // here as each area gains testnet support.
 const nonMainnetRoutePrefixes = ['/multisig'];
 
+const networkAgnosticPaths = ['/'];
+
+const networkAgnosticRoutePrefixes = [
+  '/apps',
+  '/developers',
+  '/news',
+  '/explorer',
+  '/posts',
+  '/support',
+  '/changelog',
+];
+
+function matchesRoutePrefix(pathname: string, prefix: string) {
+  return pathname === prefix || pathname.startsWith(`${prefix}/`);
+}
+
 export function routeSupportsNetwork(pathname: string, networkName: StacksNetworkName): boolean {
   if (networkName === 'mainnet') return true;
-  return nonMainnetRoutePrefixes.some(
-    prefix => pathname === prefix || pathname.startsWith(`${prefix}/`)
+  if (networkAgnosticPaths.includes(pathname)) return true;
+  return [...nonMainnetRoutePrefixes, ...networkAgnosticRoutePrefixes].some(prefix =>
+    matchesRoutePrefix(pathname, prefix)
   );
 }

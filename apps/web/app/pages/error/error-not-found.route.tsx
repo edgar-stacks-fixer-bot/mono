@@ -1,16 +1,14 @@
-import { type MetaDescriptor } from 'react-router';
+import { data } from 'react-router';
+
+import { notFoundMeta } from '~/pages/seo/marketing-meta';
 
 import { NotFound } from './not-found';
 
-export function meta() {
-  return [
-    { title: '404 · Page Not Found – Leather' },
-    {
-      name: 'description',
-      content: `The page you're looking for doesn't exist`,
-    },
-  ] satisfies MetaDescriptor[];
+export function loader() {
+  return data(null, { status: 404 });
 }
+
+export const meta = notFoundMeta;
 
 export default function NotFoundRoute() {
   return <NotFound />;

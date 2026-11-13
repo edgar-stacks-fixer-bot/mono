@@ -84,7 +84,7 @@ export default defineConfig(({ command, mode, isSsrBuild }) => ({
     copyMswWorker(),
     cloudflare({ viteEnvironment: { name: 'ssr' } }),
     svgr({ include: '**/*.svg' }),
-    viteCommonjs(),
+    viteCommonjs({ exclude: ['splinetool', 'classicRuntime'] }),
     reactRouter(),
     process.env.LEATHER_TARGET === 'production' &&
       sentryReactRouter(sentryConfig, { command, mode, isSsrBuild }),

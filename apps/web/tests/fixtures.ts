@@ -59,7 +59,7 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
     async ({ browser }, use, workerInfo) => {
       const page = await browser.newPage({ baseURL: workerInfo.project.use.baseURL });
       await page.addInitScript(seedLocalStorage, mockModeStorage);
-      await page.goto('/');
+      await page.goto('/staking');
       await walletHeaderButton(page, 'mock-installed').click();
       const questCompleted = page.waitForResponse(isConnectQuestResponse);
       await page.getByRole('button', { name: 'Resolve' }).click();
@@ -128,7 +128,7 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
         await page.addInitScript(seedLocalStorage, connectedStorage);
       }
 
-      await page.goto('/');
+      await page.goto('/staking');
       await expect(walletHeaderButton(page, options.mode)).toBeVisible();
     }
     await use(setMode);
