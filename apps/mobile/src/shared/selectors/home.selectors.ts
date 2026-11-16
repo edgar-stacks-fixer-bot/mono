@@ -1,0 +1,17 @@
+export const HomeSelectors = {
+  AccountHeader: 'homeAccountHeader',
+  AccountSelectorCard: 'homeAccountSelectorCard',
+  AccountSelectorSheet: 'homeAccountSelectorSheet',
+  CollectiblesList: 'homeCollectiblesList',
+  CollectiblesTab: 'homeCollectiblesTab',
+  CreateWalletCard: 'homeCreateWalletCard',
+  HiddenTokensButton: 'homeHiddenTokensButton',
+  HomeTab: 'homeTabBarHomeTab',
+  ManageTokensButton: 'homeManageTokensButton',
+  ManageTokensDefaultSetItem: 'homeManageTokensDefaultSetItem',
+  ManageTokensSheet: 'homeManageTokensSheet',
+  PrivacyButton: 'homePrivacyButton',
+  SettingsButton: 'homeSettingsButton',
+  TokenPresetItem: 'homeTokenPresetItem',
+  TokensTab: 'homeTokensTab',
+} as const;

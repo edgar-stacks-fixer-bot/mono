@@ -8,7 +8,7 @@ import { AccountCard } from '@/features/account/components/account-card';
 import { AccountBalance } from '@/features/balances/total-balance';
 import SettingsLayout from '@/features/settings/settings-layout';
 import { AccountNameSheet } from '@/features/settings/wallet-and-accounts/account-name-sheet';
-import { TestId } from '@/shared/test-id';
+import { AccountSelectors } from '@/shared/selectors/account.selectors';
 import { type Account, AccountLoader } from '@/store/accounts/accounts';
 import { userRenamesAccount, userTogglesHideAccount } from '@/store/accounts/accounts.write';
 import { useAppDispatch } from '@/store/utils';
@@ -62,7 +62,7 @@ function ConfigureAccount({ fingerprint, accountIndex, account }: ConfigureAccou
 
   return (
     <>
-      <SettingsLayout title={t`Configure\naccount`}>
+      <SettingsLayout title={t`Configure\naccount`} testID={AccountSelectors.ConfigureScreen}>
         <Box gap="4">
           <Box px="5">
             <WalletLoader fingerprint={account.fingerprint} key={account.id}>
@@ -92,7 +92,7 @@ function ConfigureAccount({ fingerprint, accountIndex, account }: ConfigureAccou
               onPress={() => {
                 accountNameSheetRef.current?.present();
               }}
-              testID={TestId.walletSettingsAccountNameCell}
+              testID={AccountSelectors.SettingsNameCell}
             />
             <SettingsListItem
               title={t`Avatar`}
@@ -103,18 +103,21 @@ function ConfigureAccount({ fingerprint, accountIndex, account }: ConfigureAccou
                   params: { wallet: fingerprint, account: accountIndex },
                 });
               }}
+              testID={AccountSelectors.SettingsAvatarCell}
             />
             {account.status === 'active' ? (
               <SettingsListItem
                 title={t`Hide account`}
                 icon={<Eye1ClosedIcon />}
                 onPress={toggleHideAccount}
+                testID={AccountSelectors.SettingsHideCell}
               />
             ) : (
               <SettingsListItem
                 title={t`Reveal account`}
                 icon={<Eye1Icon />}
                 onPress={toggleHideAccount}
+                testID={AccountSelectors.SettingsRevealCell}
               />
             )}
           </SettingsList>

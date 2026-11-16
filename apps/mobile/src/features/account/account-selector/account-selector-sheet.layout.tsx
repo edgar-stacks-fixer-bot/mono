@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FullHeightSheet } from '@/components/sheets/full-height-sheet/full-height-sheet';
 import { AccountBalance } from '@/features/balances/total-balance';
 import { HEADER_HEIGHT } from '@/shared/constants';
+import { HomeSelectors } from '@/shared/selectors/home.selectors';
 import { type Account } from '@/store/accounts/accounts';
 import { getConnectedAppsToAccountIdMap, useApps } from '@/store/apps/apps.read';
 import { useSettings } from '@/store/settings/settings';
@@ -44,6 +45,7 @@ export function AccountSelectorSheetLayout({
         px="5"
         pb="5"
         style={{ paddingTop: top + theme.spacing['5'] }}
+        testID={HomeSelectors.AccountSelectorSheet}
       >
         <PortfolioHeader />
       </Box>
@@ -64,6 +66,7 @@ export function AccountSelectorSheetLayout({
                           )
                       }
                       onPress={() => onAccountPress(account)}
+                      testID={HomeSelectors.AccountSelectorCard}
                       caption={wallet.name}
                       primaryTitle={account.name}
                       appOrigins={connectedAppsToAccountIdMap[account.id]?.map(app => app.origin)}

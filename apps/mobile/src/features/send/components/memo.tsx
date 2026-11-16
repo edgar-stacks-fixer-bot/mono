@@ -4,6 +4,7 @@ import { type NativeSyntheticEvent, type TextInputSubmitEditingEventData } from 
 
 import { SheetLayout } from '@/components/sheets/sheet.layout';
 import { TextInput } from '@/components/text-input';
+import { SendSelectors } from '@/shared/selectors/send.selectors';
 import { t } from '@lingui/core/macro';
 
 import {
@@ -55,6 +56,7 @@ export function Memo({ value, onChange, onBlur, invalid, isTouched, error }: Mem
         alignSelf="center"
         borderRadius="sm"
         onPress={() => sheetRef.current?.present()}
+        testID={SendSelectors.MemoToggle}
         p="2"
       >
         <NoteEmptyIcon

@@ -7,6 +7,7 @@ import { Screen } from '@/components/screen/screen';
 import { RefreshControl } from '@/features/refresh-control/refresh-control';
 import { CollectiblesListLoading } from '@/features/token/components/collectibles-list-loading';
 import { EmptyCollectiblesContent } from '@/features/token/components/empty-collectibles-content';
+import { HomeSelectors } from '@/shared/selectors/home.selectors';
 import { useRouter } from 'expo-router';
 
 import { type NonFungibleCryptoAsset } from '@leather.io/models';
@@ -51,6 +52,7 @@ export function CollectiblesList({ collectiblesState, header }: CollectiblesList
   return (
     <Screen.FlashList
       numColumns={2}
+      testID={HomeSelectors.CollectiblesList}
       data={collectibles}
       renderItem={({ item }) =>
         renderCollectible({

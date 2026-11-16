@@ -5,6 +5,7 @@ import { WebView, type WebViewMessageEvent, type WebViewNavigation } from 'react
 
 import { useGlobalSheets } from '@/core/global-sheet-provider';
 import { type BrowserLoadingMethods } from '@/features/account/components/browser-loading';
+import { BrowserSelectors } from '@/shared/selectors/browser.selectors';
 import { userAddsApp } from '@/store/apps/apps.write';
 import { useAppDispatch } from '@/store/utils';
 import * as Linking from 'expo-linking';
@@ -155,6 +156,7 @@ export function Browser({
             commitSha: 'sha',
           })}
           ref={webViewRef}
+          testID={BrowserSelectors.WebView}
           style={{
             flex: 1,
             backgroundColor: theme.colors['ink.background-primary'],

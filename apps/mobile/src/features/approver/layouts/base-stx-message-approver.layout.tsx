@@ -1,4 +1,5 @@
 import { ApproverAccountCard } from '@/features/approver/components/approver-account-card';
+import { RpcStacksSelectors } from '@/shared/selectors/rpc-stacks.selectors';
 import { type Account } from '@/store/accounts/accounts';
 import { t } from '@lingui/core/macro';
 
@@ -46,7 +47,7 @@ export function BaseStxMessageApproverLayout({
           />
         </Approver.Section>
         {messageToSign.messageType === 'utf8' && (
-          <Approver.Section>
+          <Approver.Section testID={RpcStacksSelectors.SignMessageMessage}>
             <Text variant="label01">{t`Message`}</Text>
             <Cell.Root pressable={false}>
               <Cell.Content>

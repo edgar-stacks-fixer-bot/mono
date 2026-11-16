@@ -3,6 +3,7 @@ import { useWindowDimensions } from 'react-native';
 import { Screen } from '@/components/screen/screen';
 import { HeaderSubtitle } from '@/components/screen/screen-header/components/header-title';
 import { NetworkBadge } from '@/features/settings/network-badge';
+import { TokenSelectors } from '@/shared/selectors/token.selectors';
 
 import { type NonFungibleCryptoAsset } from '@leather.io/models';
 import { Box, Text } from '@leather.io/ui/native';
@@ -46,7 +47,11 @@ export function Collectible({ name, details, children }: CollectibleProps) {
         rightElement={<NetworkBadge />}
       />
       <Screen.ScrollView>
-        <Box gap="1" backgroundColor="ink.background-secondary">
+        <Box
+          gap="1"
+          backgroundColor="ink.background-secondary"
+          testID={TokenSelectors.CollectibleDetails}
+        >
           {children}
         </Box>
       </Screen.ScrollView>

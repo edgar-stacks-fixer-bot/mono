@@ -1,3 +1,5 @@
+import { TokenSelectors } from '@/shared/selectors/token.selectors';
+
 import { Box, Text } from '@leather.io/ui/native';
 
 interface TokenOverviewProps {
@@ -21,6 +23,7 @@ export function TokenOverview({
       flexWrap="wrap"
       p="5"
       backgroundColor="ink.background-primary"
+      testID={TokenSelectors.DetailsOverview}
     >
       <Box flexDirection="column" alignItems="center" gap="3" flex={1}>
         {heading}

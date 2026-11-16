@@ -3,6 +3,7 @@ import { useWindowDimensions } from 'react-native';
 
 import { LoadingItem } from '@/components/loading/loading-item';
 import { Screen } from '@/components/screen/screen';
+import { ActivitySelectors } from '@/shared/selectors/activity.selectors';
 
 interface ActivityLoadingProps {
   header?: ReactNode;
@@ -17,6 +18,7 @@ export function ActivityLoading({ header, count }: ActivityLoadingProps) {
   const skeletonRows = Array.from({ length: resolvedCount }, (_, index) => index);
   return (
     <Screen.List
+      testID={ActivitySelectors.List}
       data={skeletonRows}
       keyExtractor={index => `activity-skeleton-${index}`}
       renderItem={() => <LoadingItem />}

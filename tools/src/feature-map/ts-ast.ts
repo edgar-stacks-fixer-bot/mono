@@ -379,3 +379,67 @@ export function collectObjectPropertyStrings(
   visit(sourceFile);
   return texts;
 }
+
+export function collectCallFirstStringArguments(
+  sourceFile: ts.SourceFile,
+  functionNames: readonly string[]
+): string[] {
+  const texts: string[] = [];
+  function visit(node: ts.Node) {
+    if (
+      ts.isCallExpression(node) &&
+      ts.isIdentifier(node.expression) &&
+      functionNames.includes(node.expression.text)
+    ) {
+      const argument = node.arguments[0];
+      const text = argument ? getStringLiteralText(argument) : undefined;
+      if (text !== undefined) texts.push(text);
+    }
+    ts.forEachChild(node, visit);
+  }
+  visit(sourceFile);
+  return texts;
+}
+
+interface DispatchedEndpoint {
+  readonly name: string;
+  readonly line: number;
+}
+
+function endpointOfMethodAccess(node: ts.Expression, propertyName: string): string | undefined {
+  const expression = unwrapExpression(node);
+  if (
+    ts.isPropertyAccessExpression(expression) &&
+    ts.isIdentifier(expression.expression) &&
+    expression.name.text === propertyName
+  )
+    return expression.expression.text;
+  return undefined;
+}
+
+function endpointOfSafeParse(node: ts.CallExpression): string | undefined {
+  const callee = node.expression;
+  if (!ts.isPropertyAccessExpression(callee) || callee.name.text !== 'safeParse') return undefined;
+  const request = callee.expression;
+  if (!ts.isPropertyAccessExpression(request) || request.name.text !== 'request') return undefined;
+  return ts.isIdentifier(request.expression) ? request.expression.text : undefined;
+}
+
+export function collectDispatchedEndpoints(
+  sourceFile: ts.SourceFile,
+  propertyName: string
+): DispatchedEndpoint[] {
+  const endpoints: DispatchedEndpoint[] = [];
+  function endpointOf(node: ts.Node): string | undefined {
+    if (ts.isCaseClause(node)) return endpointOfMethodAccess(node.expression, propertyName);
+    if (ts.isCallExpression(node)) return endpointOfSafeParse(node);
+    return undefined;
+  }
+  function visit(node: ts.Node) {
+    const name = endpointOf(node);
+    if (name !== undefined) endpoints.push({ name, line: getLine(sourceFile, node) });
+    ts.forEachChild(node, visit);
+  }
+  visit(sourceFile);
+  return endpoints;
+}
