@@ -1,0 +1,31 @@
+import { formatBytes } from './format-bytes';
+
+describe(formatBytes.name, () => {
+  test('formats zero bytes', () => {
+    expect(formatBytes(0)).toEqual('0 B');
+  });
+
+  test('formats bytes below one kilobyte', () => {
+    expect(formatBytes(512)).toEqual('512 B');
+    expect(formatBytes(1023)).toEqual('1023 B');
+  });
+
+  test('formats kilobytes with at most one decimal', () => {
+    expect(formatBytes(1536)).toEqual('1.5 KB');
+    expect(formatBytes(1100)).toEqual('1.1 KB');
+  });
+
+  test('drops a trailing .0', () => {
+    expect(formatBytes(1024)).toEqual('1 KB');
+    expect(formatBytes(2 * 1024 * 1024)).toEqual('2 MB');
+  });
+
+  test('moves to the next unit when rounding reaches it', () => {
+    expect(formatBytes(1024 * 1024 - 1)).toEqual('1 MB');
+  });
+
+  test('formats larger units', () => {
+    expect(formatBytes(3.25 * 1024 ** 3)).toEqual('3.3 GB');
+    expect(formatBytes(1024 ** 4)).toEqual('1 TB');
+  });
+});
